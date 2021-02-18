@@ -1,6 +1,6 @@
-import pprint
+import pprint as pprint_
 
-PP = pprint.PrettyPrinter(indent=4)
+PP = pprint_.PrettyPrinter(indent=4)
 
-def print(*args):
+def pprint(*args):
   PP.pprint(*args)
