@@ -64,11 +64,10 @@ def calculate_accuracy(dist_func, sample_size):
   # return results
   return total_correct, total, accuracy
 
-def main():
-  # calculate metric on a distance
-  sample_size = 3
-  inner_dist_func_name = 'hamming'
-  dist_agg_func_name = 'mean'
+def calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name):
+  '''
+  Calculate a metric on a single distance.
+  '''
   dist_func = lambda c, c_seqs: distances.one_to_many(
     c,
     c_seqs,
@@ -80,7 +79,23 @@ def main():
   print(total_correct, total, f'{accuracy:.0%}')
   log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}')
 
+def calculate_combinations():
+  '''
+  Try out multiple combinations of input parameters for the sake of comparing them.
+  '''
+  sample_size = 1
+  for inner_dist_func_name in ('jaccard', 'sorensen', 'hamming'):
+    for dist_agg_func_name in ('min', 'max', 'mean'):
+      calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
 
+def main():
+  calculate_combinations()
 
 if __name__ == '__main__':
   main()
+
+
+
+
+
+
