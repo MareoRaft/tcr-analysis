@@ -14,7 +14,7 @@ FILE_NAMES = [
   # 'cdr3.a.C_2017_2018_d_00_26898.ann',
 ]
 
-log = clogging.getLogger('global', 'log_results.txt')
+log = clogging.getLogger('global', 'results.log')
 
 
 # Functions
@@ -66,13 +66,19 @@ def calculate_accuracy(dist_func, sample_size):
 
 def main():
   # calculate metric on a distance
-  sample_size = 4
-  inner_dict_func_name = 'sorensen'
-  dist_func = lambda c, c_seqs: distances.min_to_set(c, c_seqs, getattr(distances, inner_dict_func_name))
+  sample_size = 3
+  inner_dist_func_name = 'hamming'
+  dist_agg_func_name = 'mean'
+  dist_func = lambda c, c_seqs: distances.one_to_many(
+    c,
+    c_seqs,
+    getattr(distances, inner_dist_func_name),
+    getattr(distances, dist_agg_func_name),
+  )
   total_correct, total, accuracy = calculate_accuracy(dist_func, sample_size)
   # output results
   print(total_correct, total, f'{accuracy:.0%}')
-  log.info(f'{inner_dict_func_name}, min_to_set, {total_correct}, {total}, {accuracy:.0%}')
+  log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}')
 
 
 
