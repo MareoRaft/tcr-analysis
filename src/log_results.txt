@@ -1,2 +1,0 @@
-2021-02-18 02:25 PM 23.040 sec,  main.py, line 73,  INFO, hamming, min_to_set, 2, 2, 100%
-2021-02-18 02:25 PM 35.744 sec,  main.py, line 73,  INFO, hamming, min_to_set, 2, 2, 100%

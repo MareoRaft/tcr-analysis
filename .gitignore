@@ -3,4 +3,4 @@ cache/
 __pycache__/
 saved_models/
 *.sublime-workspace
-
+*.log

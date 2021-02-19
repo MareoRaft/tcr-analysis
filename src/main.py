@@ -36,7 +36,7 @@ def get_nearest_neighbor(c, name_to_counter, dist_func):
   # return
   return predicted_person
 
-def calculate_accuracy(dist_func):
+def calculate_accuracy(dist_func, sample_size):
   # pick a cdr3 seq
   name_to_counter = {fn:get_counter(fn) for fn in FILE_NAMES}
   # iterate through all test seqs and calculate accuracy
@@ -45,7 +45,7 @@ def calculate_accuracy(dist_func):
   for name,counter in name_to_counter.items():
     print('counter len:', len(counter))
     items = counter.items()
-    sample_size = min(1, len(items))
+    sample_size = min(sample_size, len(items))
     sample_items = random.sample(list(enumerate(items)), sample_size)
     for i,(c,freq) in sample_items:
       print('index:', i)
@@ -66,11 +66,13 @@ def calculate_accuracy(dist_func):
 
 def main():
   # calculate metric on a distance
-  dist_func = lambda c, c_seqs: distances.min_to_set(c, c_seqs, distances.hamming)
-  total_correct, total, accuracy = calculate_accuracy(dist_func)
+  sample_size = 4
+  inner_dict_func_name = 'sorensen'
+  dist_func = lambda c, c_seqs: distances.min_to_set(c, c_seqs, getattr(distances, inner_dict_func_name))
+  total_correct, total, accuracy = calculate_accuracy(dist_func, sample_size)
   # output results
   print(total_correct, total, f'{accuracy:.0%}')
-  log.info(f'hamming, min_to_set, {total_correct}, {total}, {accuracy:.0%}')
+  log.info(f'{inner_dict_func_name}, min_to_set, {total_correct}, {total}, {accuracy:.0%}')
 
 
 
