@@ -7,21 +7,23 @@ import distances
 
 
 # Setup
-FILE_NAMES = [
-  # 'cdr3.test.ann',
-  'cdr3.a.A_2000_2001_d_00_47407.ann',
-  'cdr3.a.B_2017_2018_d_00_32483.ann',
-  # 'cdr3.a.C_2017_2018_d_00_26898.ann',
-]
+FILE_NAMES = {
+  # 'T': ['cdr3.test.ann'],
+  'A': [
+    'cdr3.a.A_2000_2001_d_00_47407.ann',
+    'cdr3.a.A_2017_2018_d_00_53535.ann',
+  ],
+  'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
+  # ['cdr3.a.C_2017_2018_d_00_26898.ann'],
+}
 
 log = clogging.getLogger('global', 'results.log')
 
 
 # Functions
-def get_counter(file_name):
-  counter = data_utils.get_cdr3_counter(f'data/ann/{file_name}')
-  dictionary = counter.to_dict()['frequency']
-  return dictionary
+def get_counter(fl):
+  counter = data_utils.get_cdr3_counter_from_files(fl)
+  return counter
 
 def get_dists(c, name_to_counter, dist_func):
   # given a cdr3 sequence, find nearest neighbor
@@ -38,7 +40,7 @@ def get_nearest_neighbor(c, name_to_counter, dist_func):
 
 def calculate_accuracy(dist_func, sample_size):
   # pick a cdr3 seq
-  name_to_counter = {fn:get_counter(fn) for fn in FILE_NAMES}
+  name_to_counter = {n:get_counter(fl) for n,fl in FILE_NAMES.items()}
   # iterate through all test seqs and calculate accuracy
   total_correct = 0
   total = 0
@@ -89,7 +91,8 @@ def calculate_combinations():
       calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
 
 def main():
-  calculate_combinations()
+  # calculate_combinations()
+  calculate_combination(sample_size=3, inner_dist_func_name='sorensen', dist_agg_func_name='min')
 
 if __name__ == '__main__':
   main()

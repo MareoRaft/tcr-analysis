@@ -17,8 +17,8 @@ def test_hamming():
   assert hamming('fg', 'uu') == 2
   assert hamming('fg', 'u') == 2
 
-def test_min_to_set():
-  assert min_to_set('s', [], hamming) == np.inf
-  assert min_to_set('s', ['s'], hamming) == 0
-  assert min_to_set('s', ['f', 's'], hamming) == 0
-  assert min_to_set('s', ['f', 'g'], hamming) == 1
+def test_one_to_many():
+  assert one_to_many('s', ['s'], hamming, min) == 0
+  assert one_to_many('s', ['f', 's'], hamming, min) == 0
+  assert one_to_many('s', ['a'], hamming, min) == 1
+  assert one_to_many('s', ['f', 'g'], hamming, min) == 1
