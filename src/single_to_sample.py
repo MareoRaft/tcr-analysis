@@ -3,7 +3,7 @@ import random
 from pretty_print import pprint
 import clogging
 import data_utils
-import distances
+import cdr3_distances
 
 
 # Setup
@@ -23,18 +23,15 @@ log = clogging.getLogger('global', 'one_to_many_results.log')
 
 
 # Functions
-def get_counter(fl):
-  counter = data_utils.get_cdr3_counter_from_files(fl)
-  return counter
-
-def get_dists(c, name_to_counter, dist_func):
+def get_dists(c, counters, dist_func):
   # given a cdr3 sequence, find nearest neighbor
-  counter_to_dist = {n:dist_func(c, counter.keys()) for n,counter in name_to_counter.items()}
-  return counter_to_dist
+  name_to_dist = {counter.id:dist_func(c, counter.keys()) for counter in counters}
+  print(name_to_dist)
+  return name_to_dist
 
-def get_nearest_neighbor(c, name_to_counter, dist_func):
+def get_nearest_neighbor(c, counters, dist_func):
   # get dists
-  name_to_dist = get_dists(c, name_to_counter, dist_func)
+  name_to_dist = get_dists(c, counters, dist_func)
   # get argmin (name of nearest neighbor)
   predicted_person = min(name_to_dist, key=name_to_dist.get)
   # return
@@ -42,11 +39,11 @@ def get_nearest_neighbor(c, name_to_counter, dist_func):
 
 def calculate_accuracy(dist_func, sample_size):
   # pick a cdr3 seq
-  name_to_counter = {n:get_counter(fl) for n,fl in FILE_NAMES.items()}
+  counters = {data_utils.get_cdr3_counter_from_files(n,fl) for n,fl in FILE_NAMES.items()}
   # iterate through all test seqs and calculate accuracy
   total_correct = 0
   total = 0
-  for name,counter in name_to_counter.items():
+  for counter in counters:
     print('counter len:', len(counter))
     items = counter.items()
     sample_size = min(sample_size, len(items))
@@ -57,9 +54,9 @@ def calculate_accuracy(dist_func, sample_size):
       freq = counter[c]
       del counter[c]
       # make prediction
-      predicted_name = get_nearest_neighbor(c, name_to_counter, dist_func)
+      predicted_name = get_nearest_neighbor(c, counters, dist_func)
       # record if prediction was correct or not
-      if predicted_name == name:
+      if predicted_name == counter.id:
         total_correct += 1
       total += 1
       # TODO: since this was LOOCV, we must put the c_seq back in
@@ -72,11 +69,11 @@ def calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
   '''
   Calculate a metric on a single distance.
   '''
-  dist_func = lambda c, c_seqs: distances.one_to_many(
+  dist_func = lambda c, c_seqs: cdr3_distances.one_to_many(
     c,
     c_seqs,
-    getattr(distances, inner_dist_func_name),
-    getattr(distances, dist_agg_func_name),
+    getattr(cdr3_distances, inner_dist_func_name),
+    getattr(cdr3_distances, dist_agg_func_name),
   )
   total_correct, total, accuracy = calculate_accuracy(dist_func, sample_size)
   # output results
