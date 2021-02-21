@@ -11,13 +11,15 @@ FILE_NAMES = {
   # 'T': ['cdr3.test.ann'],
   'A': [
     'cdr3.a.A_2000_2001_d_00_47407.ann',
-    'cdr3.a.A_2017_2018_d_00_53535.ann',
+    # 'cdr3.a.A_2017_2018_d_00_53535.ann',
   ],
   'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
-  # ['cdr3.a.C_2017_2018_d_00_26898.ann'],
+  'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
+  'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
+  'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
 }
 
-log = clogging.getLogger('global', 'results.log')
+log = clogging.getLogger('global', 'one_to_many_results.log')
 
 
 # Functions
@@ -86,13 +88,13 @@ def calculate_combinations():
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
   sample_size = 1
-  for inner_dist_func_name in ('jaccard', 'sorensen', 'hamming'):
+  for inner_dist_func_name in ('jaccard', 'hamming', 'sorensen'):
     for dist_agg_func_name in ('min', 'max', 'mean'):
       calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
 
 def main():
-  # calculate_combinations()
-  calculate_combination(sample_size=3, inner_dist_func_name='sorensen', dist_agg_func_name='min')
+  calculate_combinations()
+  # calculate_combination(sample_size=3, inner_dist_func_name='sorensen', dist_agg_func_name='min')
 
 if __name__ == '__main__':
   main()

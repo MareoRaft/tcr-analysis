@@ -1,12 +1,13 @@
 '''
 Utilities for reading and writing data.
 '''
-from collections import Counter
 import functools
 
 import pandas as pd
 
-def get_cdr3_counter_from_file(filepath):
+from sample import Sample
+
+def get_cdr3_counter_from_file(id_, filepath):
   '''
   Given a `filepath` for a .ann file, load the data and return a {cdr3_sequence:frequency} dictionary.
   '''
@@ -18,13 +19,15 @@ def get_cdr3_counter_from_file(filepath):
     index_col='cdr3-sequence',
   )
   dict_ = df.to_dict()['frequency']
-  counter = Counter(dict_)
+  counter = Sample(id_, dict_)
   return counter
 
-def get_cdr3_counter_from_files(filepaths):
+def get_cdr3_counter_from_files(id_, filepaths):
   '''
   Given some filepaths, get a counter which contains the data from all the files combined.
   '''
-  counters = [get_cdr3_counter_from_file(fp) for fp in filepaths]
-  counter = functools.reduce(Counter.__add__, counters)
+  counters = [get_cdr3_counter_from_file(id_, fp) for fp in filepaths]
+  counter = functools.reduce(Sample.__add__, counters)
+  # recristen with single ID
+  counter.id = id_
   return counter
