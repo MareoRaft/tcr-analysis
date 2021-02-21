@@ -7,6 +7,7 @@ import pandas as pd
 
 from sample import Sample
 
+# dictionaries
 def get_cdr3_counter_from_file(id_, filepath):
   '''
   Given a `filepath` for a .ann file, load the data and return a {cdr3_sequence:frequency} dictionary.
@@ -31,3 +32,17 @@ def get_cdr3_counter_from_files(id_, filepaths):
   # recristen with single ID
   counter.id = id_
   return counter
+
+# Pandas Series
+def get_cdr3_series_from_file(filepath):
+  '''
+  Given a `filepath` for a .ann file, load the data and return a {cdr3_sequence:frequency} Series.
+  '''
+  fp = f'data/ann/{filepath}'
+  df = pd.read_csv(fp,
+    encoding='utf_8',
+    delimiter=',',
+    names=['cdr3-sequence', 'frequency'],
+    index_col='cdr3-sequence',
+  )
+  return df['frequency']
