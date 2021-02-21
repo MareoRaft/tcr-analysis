@@ -1,7 +1,7 @@
 from pretty_print import pprint
 import clogging
 import data_utils
-import distances
+import cdr3_distances
 
 
 # Setup
@@ -38,11 +38,11 @@ def calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
   '''
   Calculate a metric on a single distance.
   '''
-  dist_func = lambda c_seqs1, c_seqs2: distances.many_to_many(
+  dist_func = lambda c_seqs1, c_seqs2: cdr3_distances.many_to_many(
     c_seqs1,
     c_seqs2,
-    getattr(distances, inner_dist_func_name),
-    getattr(distances, dist_agg_func_name),
+    getattr(cdr3_distances, inner_dist_func_name),
+    getattr(cdr3_distances, dist_agg_func_name),
   )
   calculate_accuracy(dist_func, sample_size)
 
