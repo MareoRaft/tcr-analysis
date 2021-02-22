@@ -1,21 +1,7 @@
 import numpy as np
 import pandas as pd
 
-
-def get_series(filepath):
-  '''
-  Given a `filepath` for a .ann file, load the data and return a {cdr3_sequence:frequency} dictionary.
-  '''
-  fp = f'data/ann/{filepath}'
-  df = pd.read_csv(fp,
-    encoding='utf_8',
-    delimiter=',',
-    names=['cdr3-sequence', 'frequency'],
-    index_col='cdr3-sequence',
-  )
-  # dict_ = df.to_dict()['frequency']
-  # counter = Sample(id_, dict_)
-  return df['frequency']
+from data_utils import get_cdr3_series_from_file as get_series
 
 def test_init():
   get_series('cdr3.a.A_2000_2001_d_00_47407.ann')
