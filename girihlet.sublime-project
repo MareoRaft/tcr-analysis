@@ -5,9 +5,13 @@
 			"folder_exclude_patterns":
 			[
 				".pytest_cache",
-        		"__pycache__"
+				"__pycache__"
 			],
-			"path": "/Users/Matthew/programming/girihlet"
+			"file_exclude_patterns":
+			[
+				"*.log"
+			],
+			"path": "."
 		}
 	],
 	"settings": {
