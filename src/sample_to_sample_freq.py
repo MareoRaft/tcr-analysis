@@ -47,7 +47,7 @@ def calculate_combinations():
 
 def main():
   # calculate_combinations()
-  calculate_combination(dist_func_name='jaccard')
+  calculate_combination(dist_func_name='l2')
 
 if __name__ == '__main__':
   main()

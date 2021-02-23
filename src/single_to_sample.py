@@ -2,8 +2,10 @@ import random
 
 from pretty_print import pprint
 import clogging
+from decorators import record_elapsed_time
 import data_utils
 import cdr3_distances
+
 
 
 # Setup
@@ -15,8 +17,8 @@ FILE_NAMES = {
   ],
   'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
   'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
-  'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
-  'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
+  # 'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
+  # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
 }
 
 log = clogging.getLogger('global', 'one_to_many_results.log')
@@ -85,13 +87,15 @@ def calculate_combinations():
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
   sample_size = 1
-  for inner_dist_func_name in ('jaccard', 'hamming', 'sorensen'):
+  for inner_dist_func_name in ('jaccard', 'hamming', 'sorensen', 'levenshtein'):
     for dist_agg_func_name in ('min', 'max', 'mean'):
       calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
 
+@record_elapsed_time
 def main():
-  calculate_combinations()
-  # calculate_combination(sample_size=3, inner_dist_func_name='sorensen', dist_agg_func_name='min')
+  # calculate_combinations()
+  calculate_combination(sample_size=1, inner_dist_func_name='hamming', dist_agg_func_name='min')
+  return 'done'
 
 if __name__ == '__main__':
   main()

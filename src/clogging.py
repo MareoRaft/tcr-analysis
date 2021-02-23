@@ -8,6 +8,7 @@ log = clogging.getLogger('somename')
 log.debug('my message') or log.warning('my message'), etc.
 
 """
+import os
 import logging
 
 import colorlog
@@ -54,7 +55,7 @@ def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_leve
 			)
 			logger.addHandler(stdout_handler)
 		if filename is not None:
-			fh = logging.FileHandler(filename)
+			fh = logging.FileHandler(os.path.join('out', filename))
 			if file_level:
 				fh.setLevel(file_level)
 			fh.setFormatter(
