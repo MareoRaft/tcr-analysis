@@ -12,7 +12,11 @@ import distance
 
 jaccard = distance.jaccard
 
+# the worst-performing distance we have so far :D
 sorensen = distance.sorensen
+
+# The 'Distance' library ALSO provides a Levenshtein iterable which can potentially be used to find the shortest Levenshtein distance between many sequences, hence saving time.
+levenshtein = distance.levenshtein
 
 def hamming(a, b):
   '''
