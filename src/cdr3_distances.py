@@ -20,12 +20,12 @@ levenshtein = distance.levenshtein
 
 def hamming(a, b):
   '''
-  Given 2 CDR3 sequences (strings of letters), output the number of letters that are different.  If one sequence is longer than the other, the shorter one is padded with letters that do not match the longer one.
+  Given 2 CDR3 sequences (tuples of letters), output the number of letters that are different.  If one sequence is longer than the other, the shorter one is padded with letters that do not match the longer one.
   '''
   if len(a) > len(b):
-    b += ' ' * (len(a) - len(b))
+    b += (' ',) * (len(a) - len(b))
   if len(b) > len(a):
-    a += ' ' * (len(b) - len(a))
+    a += (' ',) * (len(b) - len(a))
   return distance.hamming(a, b)
 
 

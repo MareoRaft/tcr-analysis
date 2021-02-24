@@ -2,7 +2,7 @@ import random
 
 from pretty_print import pprint
 import clogging
-from decorators import record_elapsed_time
+from decorators import record_elapsed_time, on_n_gram
 import data_utils
 import cdr3_distances
 
@@ -67,20 +67,21 @@ def calculate_accuracy(dist_func, sample_size):
   # return results
   return total_correct, total, accuracy
 
-def calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name):
+@record_elapsed_time
+def calculate_combination(sample_size, n_gram_len, inner_dist_func_name, dist_agg_func_name):
   '''
   Calculate a metric on a single distance.
   '''
   dist_func = lambda c, c_seqs: cdr3_distances.one_to_many(
     c,
     c_seqs,
-    getattr(cdr3_distances, inner_dist_func_name),
+    on_n_gram(n_gram_len)(getattr(cdr3_distances, inner_dist_func_name)),
     getattr(cdr3_distances, dist_agg_func_name),
   )
   total_correct, total, accuracy = calculate_accuracy(dist_func, sample_size)
   # output results
   print(total_correct, total, f'{accuracy:.0%}')
-  log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}')
+  log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}, {n_gram_len}')
 
 def calculate_combinations():
   '''
@@ -88,13 +89,14 @@ def calculate_combinations():
   '''
   sample_size = 1
   for inner_dist_func_name in ('jaccard', 'hamming', 'sorensen', 'levenshtein'):
-    for dist_agg_func_name in ('min', 'max', 'mean'):
-      calculate_combination(sample_size, inner_dist_func_name, dist_agg_func_name)
+    for dist_agg_func_name in ('min',):
+      calculate_combination(sample_size, 2, inner_dist_func_name, dist_agg_func_name)
 
 @record_elapsed_time
 def main():
   # calculate_combinations()
-  calculate_combination(sample_size=1, inner_dist_func_name='hamming', dist_agg_func_name='min')
+  for n in range(1, 6):
+    calculate_combination(sample_size=50, n_gram_len=n, inner_dist_func_name='jaccard', dist_agg_func_name='min')
   return 'done'
 
 if __name__ == '__main__':

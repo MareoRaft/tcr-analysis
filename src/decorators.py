@@ -5,6 +5,7 @@ import time
 import logging
 
 import clogging
+from ngrams import to_ngrams
 
 
 def transparent(decorator):
@@ -45,4 +46,27 @@ def record_elapsed_time(func, file_path='elapsed_times.log'):
 		logger.info(log_msg + str(logger))
 		return out
 	return new_func
+
+def on_n_gram(n):
+	'''
+	Return an n-gram decorator which decorates a distance function.
+	A distance function, once decorated, compares sequences of n-grams instead of the base sequences.
+	For example, instead of returning
+		distance('ABC', 'T')
+	on_n_gram(2)(distance) will return
+	  distance(('@A', 'AB', 'BC', 'C@'), ('@T', T@'))
+	.
+	'''
+	def on_n_gram_decorator(dist_func):
+		def new_dist_func(seq_a, seq_b):
+			new_seq_a = to_ngrams(n, seq_a)
+			new_seq_b = to_ngrams(n, seq_b)
+			return dist_func(new_seq_a, new_seq_b)
+		return new_dist_func
+	return on_n_gram_decorator
+
+
+
+
+
 
