@@ -16,9 +16,10 @@ import colorlog
 FORMAT_TEMPLATE = '%(asctime)s.%(msecs)03d sec,  %(filename)s, line %(lineno)d,  {}%(levelname)s{}, {}%(message)s'
 FORMAT_DEFAULT = FORMAT_TEMPLATE.format('', '', '')
 FORMAT_COLOR = FORMAT_TEMPLATE.format('%(log_color)s', '%(reset)s', '%(message_log_color)s')
+FORMAT_SHORT = '%(asctime)ss, %(message)s'
 DATEFMT = '%Y-%m-%d %I:%M %p %S'
 
-def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_level=None, file_level=None):
+def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_level=None, file_level=None, fmt=FORMAT_DEFAULT):
 	# in the future, when logging gets more complex, consider using a hierarchy of loggers and stuff like
 	# getChild and make child, etc, to deal with it: https://docs.python.org/3.5/library/logging.html
 	if name in logging.Logger.manager.loggerDict: # (if the logger already exists)
@@ -58,9 +59,11 @@ def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_leve
 			fh = logging.FileHandler(os.path.join('out', filename))
 			if file_level:
 				fh.setLevel(file_level)
+			if fmt == 'short':
+				fmt = FORMAT_SHORT
 			fh.setFormatter(
 				logging.Formatter(
-					FORMAT_DEFAULT,
+					fmt,
 					datefmt=DATEFMT
 				)
 			)

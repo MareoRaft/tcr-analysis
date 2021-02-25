@@ -21,7 +21,8 @@ FILE_NAMES = {
   # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
 }
 
-log = clogging.getLogger('global', 'one_to_many_results.log')
+long_log = clogging.getLogger('single_to_sample_results_long', 'long/single_to_sample_results_long.log')
+short_log = clogging.getLogger('single_to_sample_results_short', 'single_to_sample_results_short.log', fmt='short')
 
 
 # Functions
@@ -81,7 +82,9 @@ def calculate_combination(sample_size, n_gram_len, inner_dist_func_name, dist_ag
   total_correct, total, accuracy = calculate_accuracy(dist_func, sample_size)
   # output results
   print(total_correct, total, f'{accuracy:.0%}')
-  log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}, {n_gram_len}')
+  long_log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}, {n_gram_len}')
+  short_log.info(f'{accuracy:.0%}, nsamp={total}, {inner_dist_func_name}, ngram={n_gram_len}')
+
 
 def calculate_combinations():
   '''
@@ -95,8 +98,7 @@ def calculate_combinations():
 @record_elapsed_time
 def main():
   # calculate_combinations()
-  for n in range(1, 6):
-    calculate_combination(sample_size=50, n_gram_len=n, inner_dist_func_name='jaccard', dist_agg_func_name='min')
+  calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
   return 'done'
 
 if __name__ == '__main__':

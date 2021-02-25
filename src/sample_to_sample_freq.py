@@ -7,16 +7,17 @@ import sample_distances
 # Setup
 FILE_NAMES = [
   'cdr3.a.A_2000_2001_d_00_47407.ann',
-  'cdr3.a.A_2017_2018_d_00_53535.ann',
-  'cdr3.a.A_2017_2018_d_07_11143.ann',
-  'cdr3.a.A_2017_2018_d_28_44887.ann',
+  # 'cdr3.a.A_2017_2018_d_00_53535.ann',
+  # 'cdr3.a.A_2017_2018_d_07_11143.ann',
+  # 'cdr3.a.A_2017_2018_d_28_44887.ann',
   'cdr3.a.B_2017_2018_d_00_32483.ann',
-  'cdr3.a.C_2017_2018_d_00_26898.ann',
+  # 'cdr3.a.C_2017_2018_d_00_26898.ann',
   # 'cdr3.a.D_2017_2018_d_00_45294.ann',
   # 'cdr3.a.E_2017_2018_d_00_94077.ann',
 ]
 
-log = clogging.getLogger('global', 'sample_to_sample_freq_results.log')
+long_log = clogging.getLogger('sample_to_sample_results_long', 'long/sample_to_sample_results_long.log')
+short_log = clogging.getLogger('sample_to_sample_results_short', 'sample_to_sample_results_short.log', fmt='short')
 
 
 # Functions
@@ -30,6 +31,9 @@ def calculate_accuracy(dist_func):
   for ((na, ca), (nb, cb)) in pairs:
     dist = dist_func(ca, cb)
     print(f'pair:{na},  {nb}  ->  dist:{dist:15.4f}')
+  long_log.info(f'?, nsamp=?, dist={dist_func}')
+  short_log.info(f'?, nsamp=?, dist={dist_func}')
+
 
 def calculate_combination(dist_func_name):
   '''
