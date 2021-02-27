@@ -18,6 +18,7 @@ def jaccard_index(a, b):
   return numerator / denominator
 
 
+
 # distance functions
 def l2(a, b):
   '''
@@ -28,6 +29,7 @@ def l2(a, b):
 
 def jaccard(a, b):
   return 1 - jaccard_index(a, b)
+
 
 
 # meta distance functions
