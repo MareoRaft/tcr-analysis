@@ -1,3 +1,5 @@
+import re
+
 from pretty_print import pprint
 import clogging
 import data_utils
@@ -6,17 +8,19 @@ import sample_distances
 
 # Setup
 FILE_NAMES = [
-  # 'cdr3.a.A_2000_2001_d_00_47407.ann',
+  'cdr3.a.B_2017_2018_d_00_32483.ann',
+  'cdr3.a.C_2017_2018_d_00_26898.ann',
+  'cdr3.a.D_2017_2018_d_00_45294.ann',
+  'cdr3.a.E_2017_2018_d_00_94077.ann',
   'cdr3.a.A_2017_2018_d_00_53535.ann',
   'cdr3.a.A_2017_2018_d_07_11143.ann',
   'cdr3.a.A_2017_2018_d_28_44887.ann',
   'cdr3.a.A_2017_2018_m_04_73516.ann',
   'cdr3.a.A_2019_2020_d_00_20857.ann',
-  # 'cdr3.a.B_2017_2018_d_00_32483.ann',
-  # 'cdr3.a.C_2017_2018_d_00_26898.ann',
-  # 'cdr3.a.D_2017_2018_d_00_45294.ann',
-  # 'cdr3.a.E_2017_2018_d_00_94077.ann',
 ]
+# switch to BETA data
+FILE_NAMES = [re.sub(r'\.a\.', '.b.', f) for f in FILE_NAMES]
+
 
 long_log = clogging.getLogger('sample_to_sample_results_long', 'long/sample_to_sample_results_long.log')
 short_log = clogging.getLogger('sample_to_sample_results_short', 'sample_to_sample_results_short.log', fmt='short')
@@ -62,6 +66,7 @@ def calculate_combination(dist_func_name):
   Calculate a metric on a single distance.
   '''
   dist_func = getattr(sample_distances, dist_func_name)
+  print(f'Creating a compare ladder using distance "{dist_func_name}".')
   compare_ladder(dist_func)
 
 def calculate_combinations():
@@ -72,8 +77,8 @@ def calculate_combinations():
       calculate_combination(dist_func_name)
 
 def main():
-  # calculate_combinations()
-  calculate_combination(dist_func_name='l2')
+  calculate_combinations()
+  # calculate_combination(dist_func_name='l2')
 
 if __name__ == '__main__':
   main()

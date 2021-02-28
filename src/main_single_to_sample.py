@@ -83,22 +83,34 @@ def calculate_combination(sample_size, n_gram_len, inner_dist_func_name, dist_ag
   # output results
   print(total_correct, total, f'{accuracy:.0%}')
   long_log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}, {n_gram_len}')
-  short_log.info(f'{accuracy:.0%}, nsamp={total}, {inner_dist_func_name}, ngram={n_gram_len}')
+  # short log
+  formatted_dist_func_name = inner_dist_func_name.rjust(11, ' ')
+  accuracy_str = f'{accuracy:.0%}'.rjust(4, ' ')
+  short_log.info(f'{accuracy_str}, nsamp={total:03}, {formatted_dist_func_name}, ngram={n_gram_len}')
 
 
 def calculate_combinations():
   '''
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
-  sample_size = 1
-  for inner_dist_func_name in ('jaccard', 'hamming', 'sorensen', 'levenshtein'):
-    for dist_agg_func_name in ('min',):
-      calculate_combination(sample_size, 2, inner_dist_func_name, dist_agg_func_name)
+  sample_size = 256
+  # first try out levenshtein
+  print('running levenshtein...')
+  for n in range(1, 3):
+    calculate_combination(sample_size, n, 'levenshtein', 'min')
+  # then try out n-grams with jaccard
+  print('running jaccard w/ n-grams...')
+  for n in range(1, 7):
+    calculate_combination(sample_size, n, 'jaccard', 'min')
+  # do hamming for comparison
+  for n in range(1, 3):
+    calculate_combination(sample_size, n, 'hamming', 'min')
+
 
 @record_elapsed_time
 def main():
-  # calculate_combinations()
-  calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
+  calculate_combinations()
+  # calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
   return 'done'
 
 if __name__ == '__main__':
