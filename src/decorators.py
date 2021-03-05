@@ -41,9 +41,9 @@ def record_elapsed_time(func, file_path='elapsed_times.log'):
 		out = func(*args, **kwargs)
 		end_time = time.time()
 		elapsed_time = end_time - start_time
-		log_msg = 'function: {}\truntime: {}'.format(func.__name__, elapsed_time)
+		log_msg = 'function: {}, runtime: {}, args: {}'.format(func.__name__, elapsed_time, args)
 		logger = clogging.getLogger('elapsed_times', filename=file_path, stdout_level=logging.WARNING)
-		logger.info(log_msg + str(logger))
+		logger.info(log_msg)
 		return out
 	return new_func
 
