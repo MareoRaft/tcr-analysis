@@ -1,6 +1,7 @@
 import re
 
 from pretty_print import pprint
+from decorators import record_elapsed_time, on_n_gram
 import clogging
 import data_utils
 import sample_distances
@@ -8,15 +9,15 @@ import sample_distances
 
 # Setup
 FILE_NAMES = [
-  'cdr3.a.B_2017_2018_d_00_32483.ann',
-  'cdr3.a.C_2017_2018_d_00_26898.ann',
-  'cdr3.a.D_2017_2018_d_00_45294.ann',
-  'cdr3.a.E_2017_2018_d_00_94077.ann',
+  # 'cdr3.a.B_2017_2018_d_00_32483.ann',
+  # 'cdr3.a.C_2017_2018_d_00_26898.ann',
+  # 'cdr3.a.D_2017_2018_d_00_45294.ann',
+  # 'cdr3.a.E_2017_2018_d_00_94077.ann',
   'cdr3.a.A_2017_2018_d_00_53535.ann',
   'cdr3.a.A_2017_2018_d_07_11143.ann',
-  'cdr3.a.A_2017_2018_d_28_44887.ann',
-  'cdr3.a.A_2017_2018_m_04_73516.ann',
-  'cdr3.a.A_2019_2020_d_00_20857.ann',
+  # 'cdr3.a.A_2017_2018_d_28_44887.ann',
+  # 'cdr3.a.A_2017_2018_m_04_73516.ann',
+  # 'cdr3.a.A_2019_2020_d_00_20857.ann',
 ]
 # switch to BETA data
 FILE_NAMES = [re.sub(r'\.a\.', '.b.', f) for f in FILE_NAMES]
@@ -61,6 +62,7 @@ def compare_ladder(dist_func):
   for i in range(len(samples)):
     print_ladder_line(FILE_NAMES[i], dist_ladder[i])
 
+@record_elapsed_time
 def calculate_combination(dist_func_name):
   '''
   Calculate a metric on a single distance.
@@ -73,7 +75,7 @@ def calculate_combinations():
   '''
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
-  for dist_func_name in ('l2', 'jaccard'):
+  for dist_func_name in ('l2', 'jaccard', 'weighted_jaccard'):
       calculate_combination(dist_func_name)
 
 def main():

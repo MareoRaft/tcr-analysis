@@ -18,6 +18,12 @@ def test_jaccard_index():
   dist = jaccard_index(a, b)
   assert dist == 1 / 3
 
+def test_weighted_jaccard_index():
+  a = get_series('cdr3.test6.ann')
+  b = get_series('cdr3.test7.ann')
+  index = weighted_jaccard_index(a, b)
+  assert index == 11 / 24
+
 def test_get_distance_ladder():
   # vectors len 0
   assert get_distance_ladder([], lambda a, b: 1, 3) == []

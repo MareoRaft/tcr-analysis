@@ -4,7 +4,7 @@ Distance functions between Samples.  That is, Pandas Series.
 A distance function d(m, n) takes as input two samples, and outputs a mathematical "distance".
 '''
 import numpy as np
-import distance
+import pandas as pd
 
 
 
@@ -15,6 +15,18 @@ def jaccard_index(a, b):
   b_set = set(b[b != 0].keys())
   numerator = len(a_set & b_set)
   denominator = len(a_set | b_set)
+  return numerator / denominator
+
+def weighted_jaccard_index(a, b):
+  ''' For each key k, we take min(a[k], b[k]), and sum those up.  That's the numerator.  The denominator is the same except is uses max instead of min.'''
+  # NOTE: This takes about 30 times longer to run than jaccard_index
+  # numerator
+  min_ = pd.DataFrame({'a': a, 'b': b}).fillna(0).apply(min, axis=1)
+  numerator = min_.sum()
+  # denominator
+  max_ = pd.DataFrame({'a': a, 'b': b}).fillna(0).apply(max, axis=1)
+  denominator = max_.sum()
+  # return
   return numerator / denominator
 
 
@@ -29,6 +41,9 @@ def l2(a, b):
 
 def jaccard(a, b):
   return 1 - jaccard_index(a, b)
+
+def weighted_jaccard(a, b):
+  return 1 - weighted_jaccard_index(a, b)
 
 
 
@@ -48,13 +63,6 @@ def get_distance_ladder(vectors, dist_func, max_gap):
       vector_dists.append(dist)
     vectors_dists.append(vector_dists)
   return vectors_dists
-
-
-
-
-
-
-
 
 
 

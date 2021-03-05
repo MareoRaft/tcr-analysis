@@ -11,14 +11,25 @@ def test_add():
   b = get_series('cdr3.test2.ann')
   c = a.add(b, fill_value=0)
 
+def test_min():
+  a = get_series('cdr3.test6.ann')
+  b = get_series('cdr3.test7.ann')
+  df = pd.DataFrame({'a': a, 'b': b}).fillna(0)
+  min_ = df.apply(min, axis=1)
+  assert len(min_) == 5
+  assert min_['a'] == 1
+  assert min_['b'] == 3
+  assert min_['c'] == 0
+  assert min_['d'] == 0
+  assert min_['e'] == 7
+
 def test_l2_distance():
   a = get_series('cdr3.test.ann')
-  print(a)
   b = get_series('cdr3.test2.ann')
   c = np.sqrt((a.subtract(b, fill_value=0)**2).sum())
 
 if __name__ == '__main__':
-  test_l2_distance()
+  test_min()
 
 
 
