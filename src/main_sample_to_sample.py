@@ -15,7 +15,7 @@ FILE_NAMES = [
   # 'cdr3.a.E_2017_2018_d_00_94077.ann',
   'cdr3.a.A_2017_2018_d_00_53535.ann',
   'cdr3.a.A_2017_2018_d_07_11143.ann',
-  # 'cdr3.a.A_2017_2018_d_28_44887.ann',
+  'cdr3.a.A_2017_2018_d_28_44887.ann',
   # 'cdr3.a.A_2017_2018_m_04_73516.ann',
   # 'cdr3.a.A_2019_2020_d_00_20857.ann',
 ]
@@ -28,16 +28,6 @@ short_log = clogging.getLogger('sample_to_sample_results_short', 'sample_to_samp
 
 
 # Functions
-def compare_pairwise(dist_func):
-  counters = {f[7:-10]:data_utils.get_cdr3_series_from_file(f) for f in FILE_NAMES}
-  # iterate through all test seqs and calculate accuracy
-  pairs = [((na, ca), (nb, cb)) for na,ca in counters.items() for nb,cb in counters.items() if na <= nb]
-  for ((na, ca), (nb, cb)) in pairs:
-    dist = dist_func(ca, cb)
-    print(f'pair:{na},  {nb}  ->  dist:{dist:15.4f}')
-  long_log.info(f'?, nsamp=?, dist={dist_func}')
-  short_log.info(f'?, nsamp=?, dist={dist_func}')
-
 def print_ladder_line(name, dists):
   ''' print the name followed by the distances '''
   gap_width = 3
@@ -53,9 +43,9 @@ def print_ladder_line(name, dists):
     print(string.rjust(col_width, ' '), end=end)
   print()
 
-def compare_ladder(dist_func):
+def compare_ladder(dist_func, file_names):
   # get data
-  samples = [data_utils.get_cdr3_series_from_file(f) for f in FILE_NAMES]
+  samples = [data_utils.get_cdr3_series_from_file(f) for f in file_names]
   # compute distances
   dist_ladder = sample_distances.get_distance_ladder(samples, dist_func, 3)
   # display results
@@ -63,20 +53,25 @@ def compare_ladder(dist_func):
     print_ladder_line(FILE_NAMES[i], dist_ladder[i])
 
 @record_elapsed_time
-def calculate_combination(dist_func_name):
+def calculate_combination(dist_func, file_names):
   '''
   Calculate a metric on a single distance.
   '''
-  dist_func = getattr(sample_distances, dist_func_name)
-  print(f'Creating a compare ladder using distance "{dist_func_name}".')
-  compare_ladder(dist_func)
+  print(f'Creating a compare ladder using distance "{dist_func}".')
+  compare_ladder(dist_func, file_names)
 
 def calculate_combinations():
   '''
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
-  for dist_func_name in ('l2', 'jaccard', 'weighted_jaccard'):
-      calculate_combination(dist_func_name)
+  for dist_func in (
+    sample_distances.lp(1),
+    sample_distances.lp(2),
+    sample_distances.l2,
+    sample_distances.lp(3),
+    sample_distances.lp(4),
+  ):
+    calculate_combination(dist_func, FILE_NAMES)
 
 def main():
   calculate_combinations()
