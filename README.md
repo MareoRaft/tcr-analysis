@@ -4,7 +4,7 @@ A single blood sample taken from a person has many T-cells in it.  Each T-cell h
 
 Given two separate samples, we can define a **distance** between them.  In the file `sample_distances.py` you can see various distance functions that we are experimenting with (so far we have the `l2` distance (Euclidean), the `jaccard` distance, and the `weighted_jaccard` distance).
 
-The goal of this repo is to use metrics to evaluate how good these distances functions are, as well as perform other TCR analysis.
+The goal of this repo is to use metrics to evaluate how good these distance functions are, as well as perform other TCR analysis.
 
 
 
