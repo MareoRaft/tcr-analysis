@@ -67,9 +67,10 @@ def calculate_combinations():
   for dist_func in (
     sample_distances.lp(1),
     sample_distances.lp(2),
-    sample_distances.l2,
-    sample_distances.lp(3),
     sample_distances.lp(4),
+    sample_distances.lp(8),
+    sample_distances.lp(16),
+    sample_distances.linfty,
   ):
     calculate_combination(dist_func, FILE_NAMES)
 

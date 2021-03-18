@@ -39,14 +39,20 @@ def l2(a, b):
   dist = np.sqrt((a.subtract(b, fill_value=0)**2).sum())
   return dist
 
+# l1 is arguably the best because it is a good norm AND computationally efficient.
 def lp(p):
   ''' Given `p`, a real number >= 1, output the `lp` distance function. '''
   if p < 1:
     raise ValueError(f'p={p} illegal. in order for lp to be a distance function, we must have p >=1')
   def dist_func(a, b):
-    dist = (np.abs(a.subtract(b, fill_value=0)**p)).sum()**(1/p)
+    dist = (np.abs(a.subtract(b, fill_value=0))**p).sum()**(1/p)
     return dist
   return dist_func
+
+def linfty(a, b):
+  ''' The l-infinity distance, coming from the L-infinity norm. '''
+  dist = np.abs(a.subtract(b, fill_value=0)).max()
+  return dist
 
 def jaccard(a, b):
   return 1 - jaccard_index(a, b)
