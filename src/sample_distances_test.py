@@ -30,6 +30,24 @@ def test_lp():
   b = get_series('cdr3.test4.ann')
   assert lp(3)(a, b) == (3**3 + 2**3)**(1/3)
 
+def test_linfty():
+  # two identical samples gives distance 0
+  a = get_series('cdr3.test.ann')
+  b = get_series('cdr3.test.ann')
+  assert linfty(a, b) == 0
+  # between two lines, the first one has the max diff
+  a = get_series('cdr3.test3.ann')
+  b = get_series('cdr3.test4.ann')
+  assert linfty(a, b) == 3
+  # a letter present in one sample and missing in the other has the max diff
+  a = get_series('cdr3.test6.ann')
+  b = get_series('cdr3.test7.ann')
+  assert linfty(a, b) == 6
+  # the max diff isn't from the first line in the file
+  a = get_series('cdr3.test7.ann')
+  b = get_series('cdr3.test8.ann')
+  assert linfty(a, b) == 1
+
 def test_jaccard_index():
   a = get_series('cdr3.test3.ann')
   b = get_series('cdr3.test4.ann')

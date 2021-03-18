@@ -44,9 +44,14 @@ def lp(p):
   if p < 1:
     raise ValueError(f'p={p} illegal. in order for lp to be a distance function, we must have p >=1')
   def dist_func(a, b):
-    dist = (np.abs(a.subtract(b, fill_value=0)**p)).sum()**(1/p)
+    dist = (np.abs(a.subtract(b, fill_value=0))**p).sum()**(1/p)
     return dist
   return dist_func
+
+def linfty(a, b):
+  ''' The l-infinity distance, coming from the L-infinity norm. '''
+  dist = np.abs(a.subtract(b, fill_value=0)).max()
+  return dist
 
 def jaccard(a, b):
   return 1 - jaccard_index(a, b)
