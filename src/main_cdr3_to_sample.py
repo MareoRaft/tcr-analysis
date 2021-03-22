@@ -53,7 +53,7 @@ def calculate_accuracy(dist_func, sample_size):
     sample_items = random.sample(list(enumerate(items)), sample_size)
     for i,(c,freq) in sample_items:
       print('index:', i)
-      # TODO: LOOCV requires us to remove c_seq from the counter
+      # LOOCV requires us to remove c_seq from the counter
       freq = counter[c]
       del counter[c]
       # make prediction
@@ -62,7 +62,7 @@ def calculate_accuracy(dist_func, sample_size):
       if predicted_name == counter.id:
         total_correct += 1
       total += 1
-      # TODO: since this was LOOCV, we must put the c_seq back in
+      # Since this was LOOCV, we must put the c_seq back in
       counter[c] = freq
   accuracy = total_correct / total
   # return results
@@ -109,8 +109,8 @@ def calculate_combinations():
 
 @record_elapsed_time
 def main():
-  calculate_combinations()
-  # calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
+  # calculate_combinations()
+  calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
   return 'done'
 
 if __name__ == '__main__':

@@ -53,8 +53,9 @@ def many_to_many(c_seqs_1, c_seqs_2, dist_func, agg_func):
   '''
   Given TWO iterables of cdr3 sequences, `c_seqs_1` and `c_seqs_2`, find the distance between them using the given one-to-one distance function `dist_func` and the aggregation function `agg_func`.
   '''
-  dists = [dist_func(c1, c2) for c1 in c_seqs_1 for c2 in c_seqs_2]
-  return agg_func(dists)
+  dists_iterable = (one_to_many(c1, c_seqs_2, dist_func, agg_func) for c1 in c_seqs_1)
+  sorted_dists = tuple(sorted(dists_iterable))
+  return sorted_dists
 
 
 
