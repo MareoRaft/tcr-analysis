@@ -10,11 +10,7 @@ import cdr3_distances
 
 # Setup
 FILE_NAMES = {
-  # 'T': ['cdr3.test.ann'],
-  'A': [
-    'cdr3.a.A_2000_2001_d_00_47407.ann',
-    # 'cdr3.a.A_2017_2018_d_00_53535.ann',
-  ],
+  'A': ['cdr3.a.A_2000_2001_d_00_47407.ann'],
   'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
   'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
   # 'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
@@ -110,7 +106,7 @@ def calculate_combinations():
 @record_elapsed_time
 def main():
   # calculate_combinations()
-  calculate_combination(sample_size=2, n_gram_len=2, inner_dist_func_name='jaccard', dist_agg_func_name='min')
+  calculate_combination(sample_size=50, n_gram_len=1, inner_dist_func_name='hamming', dist_agg_func_name='min')
   return 'done'
 
 if __name__ == '__main__':
