@@ -76,5 +76,19 @@ def test_get_distance_ladder():
   # vectors len 3
   assert get_distance_ladder(['s', 't', 7], lambda a, b: 1, 2) == [[1, 1], [1, None], [None, None]]
 
+def test_get_pairwise_distances():
+  # no vectors
+  assert get_pairwise_distances([], jaccard) == []
+  # 1 vec
+  a = get_series('cdr3.test3.ann')
+  assert get_pairwise_distances([a], jaccard) == []
+  # 2 vecs
+  a = get_series('cdr3.test3.ann')
+  assert get_pairwise_distances([a, a], jaccard) == [0]
+  # 3 vecs
+  a = get_series('cdr3.test3.ann')
+  b = get_series('cdr3.test4.ann')
+  assert get_pairwise_distances([a, a, b], lp(1)) == [0, 5, 5]
+
 if __name__ == '__main__':
   test_jaccard_index()
