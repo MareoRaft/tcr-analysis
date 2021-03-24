@@ -7,7 +7,7 @@ import main_sample_to_sample
 import main_average_sample_distance
 
 def main():
-  out = main_average_sample_distance.main()
+  out = main_cdr3s_to_sample.main()
   print('out:', out)
 
 

@@ -55,9 +55,6 @@ def run_trial(counters, counter, dist_func, num_cdr3s):
   '''
     `num_cdr3s` -- The number of CDR3s to remove and use for a single sample guess.  More CDR3s is more information, so we expect the accuracy to stay the same or increase as num_cdr3s increases.
   '''
-  # setup totals
-  num_correct = 0
-  num_incorrect = 0
   # take a random sample of cdr3s
   cdr3s = random.sample(set(counter.keys()), num_cdr3s)
   # LOOCV requires us to remove cdr3s from the counter
@@ -65,14 +62,11 @@ def run_trial(counters, counter, dist_func, num_cdr3s):
   # make prediction
   predicted_name = get_nearest_neighbor(cdr3s, counters, dist_func)
   # record if prediction was correct or not
-  if predicted_name == counter.id:
-    num_correct += 1
-  else:
-    num_incorrect += 1
+  is_prediction_correct = (predicted_name == counter.id)
   # Since this was LOOCV, we must put the c_seq back in
   add_cdr3s_to_counters(counters, cdr3s, freq)
   # return results of trial
-  return num_correct, num_incorrect
+  return is_prediction_correct
 
 def calculate_accuracy(dist_func, num_trials_per_sample, num_cdr3s):
   # pick a cdr3 seq
@@ -82,9 +76,9 @@ def calculate_accuracy(dist_func, num_trials_per_sample, num_cdr3s):
   total_incorrect = 0
   for counter in counters:
     for _ in range(num_trials_per_sample):
-      num_correct, num_incorrect = run_trial(counters, counter, dist_func, num_cdr3s)
-      total_correct += num_correct
-      total_incorrect += num_incorrect
+      is_prediction_correct = run_trial(counters, counter, dist_func, num_cdr3s)
+      total_correct += int(is_prediction_correct)
+      total_incorrect += int(not is_prediction_correct)
   total = total_correct + total_incorrect
   accuracy = total_correct / total
   # return results
@@ -108,21 +102,26 @@ def calculate_combination(num_trials_per_sample, n_gram_len, inner_dist_func_nam
   # short log
   formatted_dist_func_name = inner_dist_func_name.rjust(11, ' ')
   accuracy_str = f'{accuracy:.0%}'.rjust(4, ' ')
-  short_log.info(f'{accuracy_str}, nsamp={total:03}, {formatted_dist_func_name}, ngram={n_gram_len}, ncdr3s={num_cdr3s}')
+  short_log.info(f'{accuracy_str}, ntrials={total:03}, {formatted_dist_func_name}, ngram={n_gram_len}, ncdr3s={num_cdr3s}, nsamp={len(FILE_NAMES)}')
 
 
 def calculate_combinations():
   '''
   Try out multiple combinations of input parameters for the sake of comparing them.
   '''
-  for num_cdr3s in range(1, 7):
-    calculate_combination(num_trials_per_sample=20, n_gram_len=1, inner_dist_func_name='hamming', dist_agg_func_name='min', num_cdr3s=num_cdr3s)
+  num_trials_per_sample = 30
+  for num_cdr3s in range(1, 8):
+    # hamming
+    calculate_combination(num_trials_per_sample=num_trials_per_sample, n_gram_len=1, inner_dist_func_name='hamming', dist_agg_func_name='min', num_cdr3s=num_cdr3s)
+    # jaccard
+    for n_gram_len in (1, 3, 4):
+      calculate_combination(num_trials_per_sample=num_trials_per_sample, n_gram_len=n_gram_len, inner_dist_func_name='jaccard', dist_agg_func_name='min', num_cdr3s=num_cdr3s)
 
 
 @record_elapsed_time
 def main():
-  calculate_combinations()
-  # calculate_combination(num_trials_per_sample=50, n_gram_len=1, inner_dist_func_name='hamming', dist_agg_func_name='min', num_cdr3s=1)
+  # calculate_combinations()
+  calculate_combination(num_trials_per_sample=5, n_gram_len=1, inner_dist_func_name='jaccard', dist_agg_func_name='min', num_cdr3s=1)
   return 'done'
 
 if __name__ == '__main__':
