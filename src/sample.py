@@ -9,7 +9,7 @@ class Sample (collections.Counter):
 
 
   # The smallest frequency that is recognized as a valid non-zero frequency.
-  CUTOFF = 50
+  CUTOFF = 10
 
   def __init__(self, id_, *args, **kwargs):
     # validation

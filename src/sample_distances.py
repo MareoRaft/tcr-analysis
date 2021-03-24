@@ -3,6 +3,8 @@ Distance functions between Samples.  That is, Pandas Series.
 
 A distance function d(m, n) takes as input two samples, and outputs a mathematical "distance".
 '''
+import itertools
+
 import numpy as np
 import pandas as pd
 
@@ -79,7 +81,11 @@ def get_distance_ladder(vectors, dist_func, max_gap):
     vectors_dists.append(vector_dists)
   return vectors_dists
 
-
+def get_pairwise_distances(vectors, dist_func):
+  ''' Given a set of vectors, get the distance between each unordered pair of vectors. '''
+  vector_pairs = itertools.combinations(vectors, 2)
+  distances = [dist_func(a, b) for a,b in vector_pairs]
+  return distances
 
 
 

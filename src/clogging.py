@@ -13,10 +13,10 @@ import logging
 
 import colorlog
 
-FORMAT_TEMPLATE = '%(asctime)s.%(msecs)03d sec,  %(filename)s, line %(lineno)d,  {}%(levelname)s{}, {}%(message)s'
+FORMAT_TEMPLATE = '%(asctime)s.%(msecs)03d sec, %(filename)s, line %(lineno)d, {}%(levelname)s{}| {}%(message)s'
 FORMAT_DEFAULT = FORMAT_TEMPLATE.format('', '', '')
 FORMAT_COLOR = FORMAT_TEMPLATE.format('%(log_color)s', '%(reset)s', '%(message_log_color)s')
-FORMAT_SHORT = '%(asctime)ss, %(message)s'
+FORMAT_SHORT = '%(asctime)ss| %(message)s'
 DATEFMT = '%Y-%m-%d %I:%M %p %S'
 
 def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_level=None, file_level=None, fmt=FORMAT_DEFAULT):

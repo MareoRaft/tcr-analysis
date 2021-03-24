@@ -57,7 +57,7 @@ def calculate_combination(dist_func, file_names):
   '''
   Calculate a metric on a single distance.
   '''
-  print(f'Creating a compare ladder using distance "{dist_func}".')
+  print(f'Creating a compare ladder using distance "{dist_func.__name__}".')
   compare_ladder(dist_func, file_names)
 
 def calculate_combinations():
