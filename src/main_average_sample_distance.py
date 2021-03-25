@@ -19,7 +19,7 @@ FILE_NAMES = {
   'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
 }
 
-short_log = clogging.getLogger('average_sample_distance_results_short', 'average_sample_distance_results_short.log', fmt='short')
+short_log = clogging.getLogger('average_sample_distance', 'average_sample_distance.log', fmt='short')
 
 
 # Functions

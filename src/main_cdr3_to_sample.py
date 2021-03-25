@@ -17,8 +17,8 @@ FILE_NAMES = {
   # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
 }
 
-long_log = clogging.getLogger('single_to_sample_results_long', 'long/single_to_sample_results_long.log')
-short_log = clogging.getLogger('single_to_sample_results_short', 'single_to_sample_results_short.log', fmt='short')
+long_log = clogging.getLogger('cdr3_to_sample_long', 'long/cdr3_to_sample.log')
+short_log = clogging.getLogger('cdr3_to_sample_short', 'cdr3_to_sample.log', fmt='short')
 
 
 # Functions

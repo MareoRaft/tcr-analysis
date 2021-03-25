@@ -9,16 +9,16 @@ import cdr3_distances
 
 
 # Setup
-FILE_NAMES = {
-  'A': ['cdr3.a.A_2000_2001_d_00_47407.ann'],
-  'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
-  'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
-  # 'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
-  # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
-}
+FILE_NAMES = [
+  'cdr3.a.A_2000_2001_d_00_47407.ann',
+  'cdr3.a.A_2017_2018_d_00_53535.ann',
+  'cdr3.a.A_2017_2018_d_07_11143.ann',
+  'cdr3.a.A_2017_2018_d_28_44887.ann',
+  'cdr3.a.A_2017_2018_m_04_73516.ann',
+  'cdr3.a.A_2019_2020_d_00_20857.ann',
+]
 
-long_log = clogging.getLogger('cdr3s_to_sample_long', 'long/cdr3s_to_sample.log')
-short_log = clogging.getLogger('cdr3s_to_sample_short', 'cdr3s_to_sample.log', fmt='short')
+short_log = clogging.getLogger('cdr3_lifespan', 'cdr3_lifespan.log', fmt='short')
 
 
 # Functions

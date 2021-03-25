@@ -23,8 +23,7 @@ FILE_NAMES = [
 FILE_NAMES = [re.sub(r'\.a\.', '.b.', f) for f in FILE_NAMES]
 
 
-long_log = clogging.getLogger('sample_to_sample_results_long', 'long/sample_to_sample_results_long.log')
-short_log = clogging.getLogger('sample_to_sample_results_short', 'sample_to_sample_results_short.log', fmt='short')
+short_log = clogging.getLogger('sample_to_sample', 'sample_to_sample.log', fmt='short', stdout=False)
 
 
 # Functions
@@ -49,8 +48,10 @@ def compare_ladder(dist_func, file_names):
   # compute distances
   dist_ladder = sample_distances.get_distance_ladder(samples, dist_func, 3)
   # display results
+  short_log.info('compare ladder results:')
   for i in range(len(samples)):
     print_ladder_line(FILE_NAMES[i], dist_ladder[i])
+    short_log.info(f'fname={FILE_NAMES[i]}, dists={dist_ladder[i]}')
 
 @record_elapsed_time
 def calculate_combination(dist_func, file_names):
@@ -75,8 +76,8 @@ def calculate_combinations():
     calculate_combination(dist_func, FILE_NAMES)
 
 def main():
-  calculate_combinations()
-  # calculate_combination(dist_func_name='l2')
+  # calculate_combinations()
+  calculate_combination(sample_distances.l2, FILE_NAMES)
 
 if __name__ == '__main__':
   main()
