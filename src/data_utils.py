@@ -2,6 +2,7 @@
 Utilities for reading and writing data.
 '''
 import functools
+import datetime
 
 import pandas as pd
 
@@ -46,3 +47,22 @@ def get_cdr3_series_from_file(filepath):
     index_col='cdr3-sequence',
   )
   return df['frequency']
+
+def get_date_from_file_name(filename):
+  # cdr3.a.A_2000_2001_d_00_47407.ann
+  year = int(filename[14:14+4])
+  day_month_indicator = filename[19]
+  days_or_months = int(filename[21:23])
+  if day_month_indicator == 'd':
+    days = days_or_months
+    dt = datetime.datetime(year, 1, 1) + datetime.timedelta(days=days)
+  elif day_month_indicator == 'm':
+    months = days_or_months
+    dt = datetime.datetime(year, 1, 1) + datetime.timedelta(days=365/12*months)
+  else:
+    raise ValueError('day month indicator was not "d" nor "m"')
+  return dt
+
+
+
+
