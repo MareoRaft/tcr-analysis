@@ -32,7 +32,7 @@ def calculate_lifespan(cdr3s, dates, samples):
   return x, ys
 
 @record_elapsed_time
-def calculate_one(cdr3s, file_names):
+def calculate_one(cdr3s, file_names, show_legend=True):
   '''
   Calculate a metric on a single distance.
   '''
@@ -43,14 +43,13 @@ def calculate_one(cdr3s, file_names):
   x, ys = calculate_lifespan(cdr3s, dates, counters)
   # output results
   short_log.info(f'cdr3s={cdr3s}, x={x}, ys={ys}, fnames={FILE_NAMES}')
-  plot.lifespan_graph(cdr3s, x, ys)
+  plot.lifespan_graph(cdr3s, x, ys, show_legend)
 
 
 @record_elapsed_time
 def main():
-  calculate_one(cdr3s=['cAVRDRVGGGNKLTf', 'cVVSAFQAGTALIf', 'cADLSGGSYIPTf', 'cLVGDPGDSSYKLIf', 'cSIKAAGNKLTf', 'cALKAAGNKLTf', 'cAVGLAGGDMRf', 'cAVVTSGTYKYIf',
-  ], file_names=FILE_NAMES)
-                      # cAVRDRVGGGNKLTf
+  s = data_utils.get_cdr3_counter_from_file('s', 'cdr3.a.A_2017_2018_m_04_73516.ann')
+  calculate_one(cdr3s=[s.get_cdr3_by_rank(r) for r in range(20)], file_names=FILE_NAMES, show_legend=False)
   return 'done'
 
 if __name__ == '__main__':

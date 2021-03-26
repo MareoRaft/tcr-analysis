@@ -39,6 +39,18 @@ def test_hash():
   s = Sample('w', {})
   {s}
 
+def test_get_cdr3s_by_rank():
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_cdr3_by_rank(1) == 'b'
+  assert s.get_cdr3_by_rank(2) == 'a'
+  # slightly more complex example
+  t = Sample('w', {'a': 100, 'b': 300, 'c': 200, 'd': 150, 'e': 250})
+  assert t.get_cdr3_by_rank(1) == 'b'
+  assert t.get_cdr3_by_rank(2) == 'e'
+  assert t.get_cdr3_by_rank(3) == 'c'
+  assert t.get_cdr3_by_rank(4) == 'd'
+  assert t.get_cdr3_by_rank(5) == 'a'
+
 def test_get_random_sample_items():
   s = Sample('w', {'a': 100, 'b': 300})
   assert len(s.get_random_sample_items(0)) == 0
@@ -56,7 +68,6 @@ def test_cutoff():
   # Things under the cutoff added after-the-fact should not appear
   s['d'] = Sample.CUTOFF - 1
   assert 'd' not in s
-
 
 if __name__ == '__main__':
   test_cutoff()

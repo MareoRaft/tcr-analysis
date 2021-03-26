@@ -11,7 +11,7 @@ COLORS = {
 }
 
 
-def lifespan_graph(cdr3s, x, ys):
+def lifespan_graph(cdr3s, x, ys, show_legend=True):
   '''
   Generate graph for a SINGLE metric, showing BOTH control and variant groups.
     * `series` -- data in form of Pandas Series
@@ -33,7 +33,8 @@ def lifespan_graph(cdr3s, x, ys):
   plt.xlabel('sample date')
   plt.ylabel('cdr3 frequency in sample')
   # add the legend
-  plt.legend()
+  if show_legend:
+    plt.legend()
   # finally, print the graph
   plt.show()
 

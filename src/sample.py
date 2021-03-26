@@ -46,6 +46,14 @@ class Sample (collections.Counter):
       if not self.__is_value_valid(v):
         del self[k]
 
+  def get_cdr3_by_rank(self, rank):
+    ''' This is like getting a cdr3 by line number in an .ann file.  Given a `rank` integer, the cdr3 in the sample with the `rank`-th highest frequency. '''
+    sorted_items = sorted(self.items(), key=lambda x: -x[1])
+    # subtract 1 since rank is 1-indexed but sorted_cdr3s are 0-indexed
+    item = sorted_items[rank-1]
+    cdr3 = item[0]
+    return cdr3
+
   def get_random_sample_items(self, sample_size):
     items = self.items()
     sample_size = min(sample_size, len(items))
