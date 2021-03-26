@@ -1,6 +1,7 @@
 '''
 Utilities for reading and writing data.
 '''
+import re
 import functools
 import datetime
 
@@ -63,6 +64,9 @@ def get_date_from_file_name(filename):
     raise ValueError('day month indicator was not "d" nor "m"')
   return dt
 
-
+def to_beta(filepaths):
+  ''' Convert alpha file names or file paths to their corresponding beta file names. '''
+  new_filepaths = [re.sub(r'\.a\.', '.b.', f) for f in filepaths]
+  return new_filepaths
 
 

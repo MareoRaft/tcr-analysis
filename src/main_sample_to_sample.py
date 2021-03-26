@@ -1,14 +1,13 @@
-import re
-
 from pretty_print import pprint
 from decorators import record_elapsed_time, on_n_gram
 import clogging
 import data_utils
+from data_utils import to_beta
 import sample_distances
 
 
 # Setup
-FILE_NAMES = [
+FILE_NAMES = to_beta([
   # 'cdr3.a.B_2017_2018_d_00_32483.ann',
   # 'cdr3.a.C_2017_2018_d_00_26898.ann',
   # 'cdr3.a.D_2017_2018_d_00_45294.ann',
@@ -18,9 +17,7 @@ FILE_NAMES = [
   'cdr3.a.A_2017_2018_d_28_44887.ann',
   # 'cdr3.a.A_2017_2018_m_04_73516.ann',
   # 'cdr3.a.A_2019_2020_d_00_20857.ann',
-]
-# switch to BETA data
-FILE_NAMES = [re.sub(r'\.a\.', '.b.', f) for f in FILE_NAMES]
+])
 
 
 short_log = clogging.getLogger('sample_to_sample', 'sample_to_sample.log', fmt='short', stdout=False)

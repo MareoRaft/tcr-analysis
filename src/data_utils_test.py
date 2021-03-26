@@ -24,3 +24,6 @@ def test_get_date_from_file_name():
   assert get_date_from_file_name('cdr3.a.A_2017_2018_d_07_11143.ann') == datetime.datetime(2018, 1, 8)
   assert get_date_from_file_name('cdr3.a.A_2017_2018_d_28_44887.ann') == datetime.datetime(2018, 1, 29)
   assert get_date_from_file_name('cdr3.a.A_2017_2018_m_04_73516.ann') == datetime.datetime(2018, 5, 2, 16)
+
+def test_to_beta():
+  assert to_beta(['cdr3.a.A_2017_2018_m_04_73516.ann']) == ['cdr3.b.A_2017_2018_m_04_73516.ann']
