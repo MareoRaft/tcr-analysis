@@ -15,7 +15,7 @@ FILE_NAMES = to_beta([
   'cdr3.a.A_2017_2018_d_07_11143.ann',
   'cdr3.a.A_2017_2018_d_28_44887.ann',
   'cdr3.a.A_2017_2018_m_04_73516.ann',
-  # 'cdr3.a.A_2019_2020_d_00_20857.ann',
+  'cdr3.a.A_2019_2020_d_00_20857.ann',
 ])
 
 
@@ -50,8 +50,8 @@ def calculate_one(cdr3s, file_names, show_legend=True):
 
 @record_elapsed_time
 def main():
-  s = data_utils.get_cdr3_counter_from_file('s', 'cdr3.b.A_2017_2018_m_04_73516.ann')
-  calculate_one(cdr3s=[s.get_cdr3_by_rank(r) for r in range(1, 4)], file_names=FILE_NAMES, show_legend=True)
+  s = data_utils.get_cdr3_counter_from_file('s', 'cdr3.b.A_2019_2020_d_00_20857.ann')
+  calculate_one(cdr3s=[s.get_cdr3_by_rank(r) for r in range(1, 5)], file_names=FILE_NAMES, show_legend=True)
   return 'done'
 
 if __name__ == '__main__':

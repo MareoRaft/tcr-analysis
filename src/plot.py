@@ -11,6 +11,35 @@ COLORS = {
 }
 
 
+def fit_curve(x, y):
+  '''
+  Generate graph for a SINGLE metric, showing BOTH control and variant groups.
+    * `series` -- data in form of Pandas Series
+  '''
+  for cdr3,y in zip(cdr3s, ys):
+    # plot results
+    line, = plt.plot_date(x, y, linestyle='solid')
+    # format date strings
+    date_format = mpl_dates.DateFormatter('%m-%d')
+    axes = plt.gca()
+    xaxis = axes.xaxis
+    xaxis.set_major_formatter(date_format)
+    # make 1 tick per date
+    axes.set_xticks(x)
+    # make label for legend
+    line.set_label(f'cdr3 {cdr3}')
+  # label things
+  plt.title('cdr3 frequencies left to right')
+  plt.xlabel('sample date')
+  plt.ylabel('cdr3 frequency in sample')
+  # add the legend
+  if show_legend:
+    plt.legend()
+  # finally, print the graph
+  plt.show()
+
+
+
 def lifespan_graph(cdr3s, x, ys, show_legend=True):
   '''
   Generate graph for a SINGLE metric, showing BOTH control and variant groups.

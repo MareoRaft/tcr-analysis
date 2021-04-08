@@ -51,6 +51,7 @@ def get_cdr3_series_from_file(filepath):
 
 def get_date_from_file_name(filename):
   # cdr3.a.A_2000_2001_d_00_47407.ann
+  # cdr3.a.A_2000_2001_m_04_47407.ann
   year = int(filename[14:14+4])
   day_month_indicator = filename[19]
   days_or_months = int(filename[21:23])

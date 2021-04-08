@@ -6,6 +6,8 @@ import main_cdr3s_to_sample
 import main_sample_to_sample
 import main_average_sample_distance
 import main_cdr3_lifespan
+import main_fit_curve
+import main_csv_to_sql
 
 def main():
   out = main_cdr3_lifespan.main()
