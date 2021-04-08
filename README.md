@@ -35,6 +35,10 @@ then visit `http://localhost:4001/?token={entertokenhere}`.  You should see a Ju
 The server is a dev server
 
 	git push
-	# and then on server
+	docker push
+	ssh date
+	tmux
+	cd tcr-analysis
 	git pull
-	docker-compose up --build
+	docker pull
+	sudo docker-compose up --build
