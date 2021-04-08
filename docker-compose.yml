@@ -1,0 +1,12 @@
+services:
+    dev:
+        image: mvlancellotti/tcr-analysis:dev
+        container_name: tcr-analysis-container
+        restart: always
+        build:
+          context: .
+          dockerfile: dev.Dockerfile
+        ports:
+          - 4001:8888
+        volumes:
+          - ./src:/home/matt/work

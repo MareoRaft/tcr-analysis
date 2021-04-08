@@ -11,13 +11,30 @@ The goal of this repo is to use metrics to evaluate how good these distance func
 
 ## Install
 
-To install deps:
-
-	pip3 install -r requirements.txt
+Install [Docker](https://www.docker.com/get-started).  That's it!
 
 
-## Run
+## Test
 
-To run:
+To test:
 
+	docker-compose up --build
+	# and then in another terminal window
+	docker exec -it tcr-analysis-container bash
 	pytest
+
+
+## Run dev environment
+
+    docker-compose up --build
+
+then visit `http://localhost:4001/?token={entertokenhere}`.  You should see a Jupyter frontend.
+
+
+## build, test, and deploy
+The server is a dev server
+
+	git push
+	# and then on server
+	git pull
+	docker-compose up --build
