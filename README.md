@@ -14,15 +14,6 @@ The goal of this repo is to use metrics to evaluate how good these distance func
 Install [Docker](https://www.docker.com/get-started).  That's it!
 
 
-## Test
-
-To test:
-
-	docker-compose up --build
-	# and then in another terminal window
-	docker exec -it tcr-analysis-container bash
-	pytest
-
 
 ## Run dev environment
 
@@ -31,14 +22,26 @@ To test:
 then visit `http://localhost:4001/?token={entertokenhere}`.  You should see a Jupyter frontend.
 
 
+
+## Test dev
+
+To run tests, run the dev environment (see above) and then (in a separate terminal window):
+
+	docker exec -it tcr-analysis-container bash
+	pytest
+
+
+
 ## build, test, and deploy
 The server is a dev server
 
 	git push
-	docker push
+	docker push mvlancellotti/tcr-analysis:dev
 	ssh date
 	tmux
 	cd tcr-analysis
 	git pull
-	docker pull
+	docker pull mvlancellotti/tcr-analysis:dev
 	sudo docker-compose up --build
+
+then visit `date:4001` or `http://date:4001/notebooks/cdr3_lifespan.ipynb?token={entertokenhere}`.
