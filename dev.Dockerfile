@@ -1,4 +1,5 @@
-FROM jupyter/scipy-notebook
+# Please update versions once every 6 months
+FROM jupyter/scipy-notebook:4d9c9bd9ced0
 
 WORKDIR /home/matt/work
 
