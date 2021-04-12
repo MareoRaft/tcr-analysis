@@ -38,10 +38,16 @@ The server is a dev server
 	git push
 	docker push mvlancellotti/tcr-analysis:dev
 	ssh date
+	su matt
 	tmux
+	# reattach to 'tcr-analysis' tmux session
 	cd tcr-analysis
 	git pull
-	docker pull mvlancellotti/tcr-analysis:dev
+	sudo docker pull mvlancellotti/tcr-analysis:dev
+	# consider deleting old images if the droplet runs out of space
+	# use ctrl-C to exit current container
+	# remove the container if necessary
+	sudo docker rm tcr-analysis-container
 	sudo docker-compose up --build
 
-then visit `date:4001` or `http://date:4001/notebooks/cdr3_lifespan.ipynb?token={entertokenhere}`.
+then visit `date:4001` or `http://date:4001/notebooks/analysis.ipynb?token={entertokenhere}`.

@@ -19,7 +19,7 @@ FORMAT_COLOR = FORMAT_TEMPLATE.format('%(log_color)s', '%(reset)s', '%(message_l
 FORMAT_SHORT = '%(asctime)ss| %(message)s'
 DATEFMT = '%Y-%m-%d %I:%M %p %S'
 
-def getLogger(name, filename=None, level=logging.DEBUG, stdout=True, stdout_level=None, file_level=None, fmt=FORMAT_DEFAULT):
+def getLogger(name, filename=None, level=logging.DEBUG, stdout=False, stdout_level=None, file_level=None, fmt=FORMAT_DEFAULT):
 	# in the future, when logging gets more complex, consider using a hierarchy of loggers and stuff like
 	# getChild and make child, etc, to deal with it: https://docs.python.org/3.5/library/logging.html
 	if name in logging.Logger.manager.loggerDict: # (if the logger already exists)

@@ -20,7 +20,7 @@ FILE_NAMES = to_beta([
 ])
 
 
-short_log = clogging.getLogger('sample_to_sample', 'sample_to_sample.log', fmt='short', stdout=False)
+short_log = clogging.getLogger('sample_to_sample', 'sample_to_sample.log', fmt='short')
 
 
 # Functions
@@ -78,9 +78,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-
-
-
-
-
-

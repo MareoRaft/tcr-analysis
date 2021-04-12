@@ -10,7 +10,7 @@ import plot
 
 
 # Setup
-short_log = clogging.getLogger('cdr3_lifespan', 'cdr3_lifespan.log', stdout=False, fmt='short')
+short_log = clogging.getLogger('cdr3_lifespan', 'cdr3_lifespan.log', fmt='short')
 
 
 # Functions

@@ -9,14 +9,6 @@ import cdr3_distances
 
 
 # Setup
-FILE_NAMES = {
-  'A': ['cdr3.a.A_2000_2001_d_00_47407.ann'],
-  'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
-  'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
-  # 'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
-  # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
-}
-
 long_log = clogging.getLogger('cdr3s_to_sample_long', 'long/cdr3s_to_sample.log')
 short_log = clogging.getLogger('cdr3s_to_sample_short', 'cdr3s_to_sample.log', fmt='short')
 
@@ -25,7 +17,6 @@ short_log = clogging.getLogger('cdr3s_to_sample_short', 'cdr3s_to_sample.log', f
 def get_dists(cdr3s, counters, dist_func):
   # given a list of cdr3 sequences, find nearest neighbor
   name_to_dist = {counter.id:dist_func(cdr3s, counter.keys()) for counter in counters}
-  print(name_to_dist)
   return name_to_dist
 
 def get_nearest_neighbor(cdr3s, counters, dist_func):
@@ -68,9 +59,9 @@ def run_trial(counters, counter, dist_func, num_cdr3s):
   # return results of trial
   return is_prediction_correct
 
-def calculate_accuracy(dist_func, num_trials_per_sample, num_cdr3s):
+def calculate_accuracy(file_names, dist_func, num_trials_per_sample, num_cdr3s):
   # pick a cdr3 seq
-  counters = {data_utils.get_cdr3_counter_from_files(n,fl) for n,fl in FILE_NAMES.items()}
+  counters = {data_utils.get_cdr3_counter_from_files(n,fl) for n,fl in file_names.items()}
   # iterate through all test seqs and calculate accuracy
   total_correct = 0
   total_incorrect = 0
@@ -85,7 +76,7 @@ def calculate_accuracy(dist_func, num_trials_per_sample, num_cdr3s):
   return total_correct, total, accuracy
 
 @record_elapsed_time
-def calculate_combination(num_trials_per_sample, n_gram_len, inner_dist_func_name, dist_agg_func_name, num_cdr3s):
+def calculate_combination(file_names, num_trials_per_sample, n_gram_len, inner_dist_func_name, dist_agg_func_name, num_cdr3s):
   '''
   Calculate a metric on a single distance.
   '''
@@ -95,14 +86,16 @@ def calculate_combination(num_trials_per_sample, n_gram_len, inner_dist_func_nam
     on_n_gram(n_gram_len)(getattr(cdr3_distances, inner_dist_func_name)),
     getattr(cdr3_distances, dist_agg_func_name),
   )
-  total_correct, total, accuracy = calculate_accuracy(dist_func, num_trials_per_sample, num_cdr3s)
+  total_correct, total, accuracy = calculate_accuracy(file_names, dist_func, num_trials_per_sample, num_cdr3s)
   # output results
-  print(total_correct, total, f'{accuracy:.0%}')
   long_log.info(f'{inner_dist_func_name}, {dist_agg_func_name}, {total_correct}, {total}, {accuracy:.0%}, {n_gram_len}, {num_cdr3s}')
   # short log
   formatted_dist_func_name = inner_dist_func_name.rjust(11, ' ')
   accuracy_str = f'{accuracy:.0%}'.rjust(4, ' ')
-  short_log.info(f'{accuracy_str}, ntrials={total:03}, {formatted_dist_func_name}, ngram={n_gram_len}, ncdr3s={num_cdr3s}, nsamp={len(FILE_NAMES)}')
+  friendly_info_str = f'accuracy={accuracy_str}, ntrials={total:03}, {formatted_dist_func_name}, ngram={n_gram_len}, ncdr3s={num_cdr3s}, nsamp={len(file_names)}'
+  short_log.info(friendly_info_str)
+  # Jupyter / terminal
+  print(friendly_info_str)
 
 
 def calculate_combinations():
@@ -121,14 +114,21 @@ def calculate_combinations():
 @record_elapsed_time
 def main():
   # calculate_combinations()
-  calculate_combination(num_trials_per_sample=5, n_gram_len=1, inner_dist_func_name='jaccard', dist_agg_func_name='min', num_cdr3s=1)
+  calculate_combination(
+    file_names={
+      'A': ['cdr3.a.A_2000_2001_d_00_47407.ann'],
+      'B': ['cdr3.a.B_2017_2018_d_00_32483.ann'],
+      'C': ['cdr3.a.C_2017_2018_d_00_26898.ann'],
+      # 'D': ['cdr3.a.D_2017_2018_d_00_45294.ann'],
+      # 'E': ['cdr3.a.E_2017_2018_d_00_94077.ann'],
+    },
+    num_trials_per_sample=3,
+    n_gram_len=1,
+    inner_dist_func_name='jaccard',
+    dist_agg_func_name='min',
+    num_cdr3s=1,
+  )
   return 'done'
 
 if __name__ == '__main__':
   main()
-
-
-
-
-
-

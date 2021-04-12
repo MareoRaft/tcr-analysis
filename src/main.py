@@ -10,7 +10,7 @@ import main_fit_curve
 import main_csv_to_sql
 
 def main():
-  out = main_cdr3_lifespan.main()
+  out = main_cdr3s_to_sample.main()
   print('out:', out)
 
 
