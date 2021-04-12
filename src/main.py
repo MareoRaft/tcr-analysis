@@ -9,7 +9,7 @@ import main_cdr3_lifespan
 import main_fit_curve
 
 def main():
-  out = main_sample_to_sample.main()
+  out = main_average_sample_distance.main()
   print('out:', out)
 
 

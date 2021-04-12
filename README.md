@@ -19,7 +19,7 @@ Install [Docker](https://www.docker.com/get-started).  That's it!
 
     docker-compose up --build
 
-then visit `http://localhost:4001/?token={entertokenhere}`.  You should see a Jupyter frontend.
+then visit `localhost:4001` or `http://localhost:4001/notebooks/analysis.ipynb?token={entertokenhere}`.  You should see a Jupyter frontend.
 
 
 
