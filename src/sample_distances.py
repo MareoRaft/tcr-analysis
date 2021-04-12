@@ -49,6 +49,8 @@ def lp(p):
   def dist_func(a, b):
     dist = (np.abs(a.subtract(b, fill_value=0))**p).sum()**(1/p)
     return dist
+  # Give the distance function a more helpful user-friendly name
+  dist_func.__name__ = f'L{p}'
   return dist_func
 
 def linfty(a, b):
@@ -86,7 +88,3 @@ def get_pairwise_distances(vectors, dist_func):
   vector_pairs = itertools.combinations(vectors, 2)
   distances = [dist_func(a, b) for a,b in vector_pairs]
   return distances
-
-
-
-

@@ -7,19 +7,6 @@ import sample_distances
 
 
 # Setup
-FILE_NAMES = to_beta([
-  # 'cdr3.a.B_2017_2018_d_00_32483.ann',
-  # 'cdr3.a.C_2017_2018_d_00_26898.ann',
-  # 'cdr3.a.D_2017_2018_d_00_45294.ann',
-  # 'cdr3.a.E_2017_2018_d_00_94077.ann',
-  'cdr3.a.A_2017_2018_d_00_53535.ann',
-  'cdr3.a.A_2017_2018_d_07_11143.ann',
-  'cdr3.a.A_2017_2018_d_28_44887.ann',
-  # 'cdr3.a.A_2017_2018_m_04_73516.ann',
-  # 'cdr3.a.A_2019_2020_d_00_20857.ann',
-])
-
-
 short_log = clogging.getLogger('sample_to_sample', 'sample_to_sample.log', fmt='short')
 
 
@@ -39,24 +26,24 @@ def print_ladder_line(name, dists):
     print(string.rjust(col_width, ' '), end=end)
   print()
 
-def compare_ladder(dist_func, file_names):
+def compare_ladder(dist_func, file_names, max_gap):
   # get data
   samples = [data_utils.get_cdr3_series_from_file(f) for f in file_names]
   # compute distances
-  dist_ladder = sample_distances.get_distance_ladder(samples, dist_func, 3)
+  dist_ladder = sample_distances.get_distance_ladder(samples, dist_func, max_gap)
   # display results
   short_log.info('compare ladder results:')
   for i in range(len(samples)):
-    print_ladder_line(FILE_NAMES[i], dist_ladder[i])
-    short_log.info(f'fname={FILE_NAMES[i]}, dists={dist_ladder[i]}')
+    print_ladder_line(file_names[i], dist_ladder[i])
+    short_log.info(f'fname={file_names[i]}, dists={dist_ladder[i]}')
 
 @record_elapsed_time
-def calculate_combination(dist_func, file_names):
+def calculate_combination(dist_func, file_names, ladder_width=3):
   '''
   Calculate a metric on a single distance.
   '''
-  print(f'Creating a compare ladder using distance "{dist_func.__name__}".')
-  compare_ladder(dist_func, file_names)
+  print(f'Creating a "{dist_func.__name__}" distance ladder...')
+  compare_ladder(dist_func, file_names, ladder_width)
 
 def calculate_combinations():
   '''
@@ -70,11 +57,28 @@ def calculate_combinations():
     sample_distances.lp(16),
     sample_distances.linfty,
   ):
-    calculate_combination(dist_func, FILE_NAMES)
+    calculate_combination(
+        dist_func=dist_func,
+        file_names=[
+            'cdr3.b.A_2017_2018_d_00_53535.ann',
+            'cdr3.b.A_2017_2018_d_07_11143.ann',
+            'cdr3.b.A_2017_2018_d_28_44887.ann',
+        ],
+    )
 
 def main():
   # calculate_combinations()
-  calculate_combination(sample_distances.l2, FILE_NAMES)
+  calculate_combination(
+    dist_func=sample_distances.l2,
+    file_names=[
+        'cdr3.b.A_2017_2018_d_00_53535.ann',
+        'cdr3.b.A_2017_2018_d_07_11143.ann',
+        'cdr3.b.A_2017_2018_d_28_44887.ann',
+        # 'cdr3.b.A_2017_2018_m_04_73516.ann',
+        # 'cdr3.b.A_2019_2020_d_00_20857.ann',
+    ],
+  )
+
 
 if __name__ == '__main__':
   main()
