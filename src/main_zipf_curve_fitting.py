@@ -29,51 +29,40 @@ FILE_NAME = FILE_NAMES[0]
 @record_elapsed_time
 def main():
     # get data
-    import openturns as ot
-    data = [
-      [2.7018013],
-      [8.53280352],
-      [1.15643882],
-      [1.03359467],
-      [1.53152735],
-      [32.70434285],
-      [12.60709624],
-      [2.012235],
-      [1.06747063],
-      [1.41394096],
-    ]
-    data = [(i+1,d[0]) for i,d in enumerate(data)]
-    x = np.array([d[0] for d in data])
-    y = np.array(list(sorted([d[1] for d in data], reverse=True)))
-    print(x)
-    print(y)
+    f = FILE_NAME
+    sample = data_utils.get_cdr3_counter_from_file(f,f)
+    print('before sort list')
+    sorted_items = list(sorted(sample.items(), key=lambda item: -item[1]))
+    data = sorted_items[:20]
 
-    # # fit curve
-    # from scipy.optimize import curve_fit
-    # from scipy.special import zetac
-    # def f(x, a):
-    #     return (x**-a)/zetac(a)
-    # result = curve_fit(f, x, y, p0=[0.56])
-    # p = result[0]
-    # print p
+    # get x and y
+    print('after sort list')
+    x = range(1, len(data)+1)
+    y = [item[1] for item in data]
+    # print(x)
+    # print(y)
+    print(min(y))
+    x_dense = np.linspace(1, len(data), 100)
+
+    # fit curve
+    from scipy.optimize import curve_fit
+    from scipy.special import zetac
+    def f(x, a, v_shift):
+        return (x**-a)/zetac(a) + v_shift
+    result = curve_fit(f, x, y, p0=[6.1, min(y)])
+    print('result:')
+    print(result)
+    print('fitted param:')
+    print(result[0])
 
     # plot data and curve
     # plot results
-    line = plt.scatter(x, y)
-    # format date strings
-    # axes = plt.gca()
-    # xaxis = axes.xaxis
-    # xaxis.set_major_formatter(date_format)
-    # # make 1 tick per date
-    # axes.set_xticks(x)
-    # make label for legend
+    plt.scatter(x, y)
+    plt.plot(x, f(x, result[0][0], result[0][1]))
     # label things
     plt.title('Zipf curve fitting')
     # plt.xlabel('sample date')
     # plt.ylabel('cdr3 frequency in sample')
-    # add the legend
-    # if show_legend:
-    # plt.legend()
     # finally, print the graph
     plt.show()
 
