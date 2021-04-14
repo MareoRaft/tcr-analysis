@@ -11,6 +11,18 @@ COLORS = {
 }
 
 
+def scatter_and_func(x, y, x_dense, y_dense):
+    '''
+    Plot a scatter plot of points, and then plot a curve on the same axis (typically used to show a curve fitting).
+    '''
+    # plot results
+    plt.scatter(x, y)
+    plt.plot(x_dense, y_dense)
+    # label things
+    plt.title('Zipf curve fitting')
+    plt.show()
+
+
 def fit_curve(x, y):
   '''
   Generate graph for a SINGLE metric, showing BOTH control and variant groups.
@@ -66,5 +78,3 @@ def lifespan_graph(cdr3s, x, ys, show_legend=True):
     plt.legend()
   # finally, print the graph
   plt.show()
-
-

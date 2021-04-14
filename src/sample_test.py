@@ -39,6 +39,30 @@ def test_hash():
   s = Sample('w', {})
   {s}
 
+def test_get_sorted_items():
+  # limit 1
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_items(1) == [('b', 300)]
+  s = Sample('w', {'b': 300, 'a': 100})
+  assert s.get_sorted_items(1) == [('b', 300)]
+  # limit 2
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_items(2) == [('b', 300), ('a', 100)]
+  # no limit
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_items() == [('b', 300), ('a', 100)]
+
+def test_get_x_y():
+  # limit 1
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_x_y(1) == ([1],[300])
+  # limit 2
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_x_y(2) == ([1, 2],[300, 100])
+  # no limit
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_x_y() == ([1, 2],[300, 100])
+
 def test_get_cdr3s_by_rank():
   s = Sample('w', {'a': 100, 'b': 300})
   assert s.get_cdr3_by_rank(1) == 'b'

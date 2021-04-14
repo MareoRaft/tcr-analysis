@@ -46,9 +46,21 @@ class Sample (collections.Counter):
       if not self.__is_value_valid(v):
         del self[k]
 
+  def get_sorted_items(self, limit=None):
+    ''' Get an array of (x,y)-pairs. Limit length if specified. '''
+    sorted_items = sorted(self.items(), key=lambda item: -item[1])[:limit]
+    return sorted_items
+
+  def get_x_y(self, limit=None):
+    ''' Get x as an array and y as an array. Limit length if specified. '''
+    sorted_x_y_pairs = self.get_sorted_items(limit)
+    x = list(range(1, len(sorted_x_y_pairs)+1))
+    y = [item[1] for item in sorted_x_y_pairs]
+    return x,y
+
   def get_cdr3_by_rank(self, rank):
     ''' This is like getting a cdr3 by line number in an .ann file.  Given a `rank` integer, the cdr3 in the sample with the `rank`-th highest frequency. '''
-    sorted_items = sorted(self.items(), key=lambda item: -item[1])
+    sorted_items = self.get_sorted_items(rank)
     # subtract 1 since rank is 1-indexed but sorted_cdr3s are 0-indexed
     item = sorted_items[rank-1]
     cdr3 = item[0]
