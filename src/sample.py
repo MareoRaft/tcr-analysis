@@ -4,6 +4,8 @@ A Sample is a Counter where the keys are cdr3 sequences.
 import collections
 import random
 
+import numpy as np
+
 
 class Sample (collections.Counter):
 
@@ -57,6 +59,12 @@ class Sample (collections.Counter):
     x = list(range(1, len(sorted_x_y_pairs)+1))
     y = [item[1] for item in sorted_x_y_pairs]
     return x,y
+
+  def get_x_y_floats(self, limit=None):
+    x,y = self.get_x_y(limit)
+    y_float = np.array(y).astype(np.float)
+    x_float = np.array(x).astype(np.float)
+    return x_float,y_float
 
   def get_cdr3_by_rank(self, rank):
     ''' This is like getting a cdr3 by line number in an .ann file.  Given a `rank` integer, the cdr3 in the sample with the `rank`-th highest frequency. '''
