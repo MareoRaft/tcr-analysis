@@ -9,10 +9,10 @@ import main_cdr3_lifespan
 import main_fit_curve
 import main_zipf_curve_fitting
 import main_exp_decay_curve_fitting
+import main_piecewise_curve_fitting
 
 def main():
-  out = main_exp_decay_curve_fitting.main()
-  print('out:', out)
+  main_piecewise_curve_fitting.main()
 
 
 if __name__ == '__main__':
