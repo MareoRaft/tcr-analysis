@@ -17,9 +17,9 @@ def scatter_and_func(x, y, x_dense, y_dense):
     '''
     # plot results
     plt.scatter(x, y)
-    plt.plot(x_dense, y_dense)
+    plt.plot(x_dense, y_dense, 'g')
     # label things
-    plt.title('Zipf curve fitting')
+    plt.title('curve fitting')
     plt.show()
 
 
