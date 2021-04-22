@@ -10,9 +10,10 @@ import main_fit_curve
 import main_zipf_curve_fitting
 import main_exp_decay_curve_fitting
 import main_piecewise_curve_fitting
+import main_n_closest_cdr3s
 
 def main():
-  main_piecewise_curve_fitting.main()
+  main_n_closest_cdr3s.main()
 
 
 if __name__ == '__main__':
