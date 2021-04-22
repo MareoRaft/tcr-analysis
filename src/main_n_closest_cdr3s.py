@@ -7,7 +7,6 @@ import clogging
 from decorators import record_elapsed_time, on_n_gram
 import data_utils
 import cdr3_distances
-from pretty_print import pprint
 
 
 
