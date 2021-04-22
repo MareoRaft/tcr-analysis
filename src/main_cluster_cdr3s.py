@@ -38,10 +38,10 @@ def hierarchical_clustering_cdr3s(cdr3s, dist_func):
     # create the dendrogram and plot it
     plot.cdr3_dendrogram(data_linkage, cdr3_list)
 
-def cluster_cdr3s(file_name, dist_func, n_gram_len=1, limit=25):
+def cluster_cdr3s(file_name, dist_func, n_gram_len=1, n=25):
     ''' user facing function '''
     sample = data_utils.get_cdr3_counter_from_file('s', file_name)
-    cdr3s = sample.get_sorted_cdr3s(limit=limit)
+    cdr3s = sample.get_sorted_cdr3s(limit=n)
     ngrammed_dist_func = on_n_gram(n_gram_len)(dist_func)
     hierarchical_clustering_cdr3s(
         cdr3s=cdr3s,
@@ -54,7 +54,7 @@ def main():
         file_name='cdr3.a.A_2017_2018_d_00_53535.ann',
         dist_func=cdr3_distances.hamming,
         n_gram_len=1,
-        limit=30,
+        n=30,
     )
 
 if __name__ == '__main__':
