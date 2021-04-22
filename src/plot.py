@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import dates as mpl_dates
+from scipy.cluster.hierarchy import dendrogram
 plt.style.use('seaborn')
 COLORS = {
   'green': '#64bf7b',
@@ -10,6 +11,16 @@ COLORS = {
   'purple': '#9388bf',
 }
 
+
+def cdr3_dendrogram(data, labels):
+    dendrogram(data, labels=labels)
+    plt.xlabel('CDR3 sequence')
+    plt.xticks(rotation=90)
+    plt.ylabel('distance')
+    plt.suptitle('CDR3 clustering', fontweight='bold', fontsize=14);
+    # but now that the labels are vertical, the bottom is cutoff.  use tight_layout to fix the margin
+    plt.tight_layout()
+    plt.show()
 
 def scatter_and_func(x, y, x_dense, y_dense):
     '''

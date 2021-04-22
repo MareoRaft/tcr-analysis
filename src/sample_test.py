@@ -52,6 +52,19 @@ def test_get_sorted_items():
   s = Sample('w', {'a': 100, 'b': 300})
   assert s.get_sorted_items() == [('b', 300), ('a', 100)]
 
+def test_get_sorted_cdr3s():
+  # limit 1
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_cdr3s(1) == ['b']
+  s = Sample('w', {'b': 300, 'a': 100})
+  assert s.get_sorted_cdr3s(1) == ['b']
+  # limit 2
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_cdr3s(2) == ['b', 'a']
+  # no limit
+  s = Sample('w', {'a': 100, 'b': 300})
+  assert s.get_sorted_cdr3s() == ['b', 'a']
+
 def test_get_x_y():
   # limit 1
   s = Sample('w', {'a': 100, 'b': 300})

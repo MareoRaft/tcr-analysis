@@ -53,6 +53,12 @@ class Sample (collections.Counter):
     sorted_items = sorted(self.items(), key=lambda item: -item[1])[:limit]
     return sorted_items
 
+  def get_sorted_cdr3s(self, limit=None):
+    ''' Get the top `limit` cdr3s, sorted from most frequent to least. '''
+    top_items = self.get_sorted_items(limit=limit)
+    top_cdr3s = [cdr3 for cdr3,_ in top_items]
+    return top_cdr3s
+
   def get_x_y(self, limit=None):
     ''' Get x as an array and y as an array. Limit length if specified. '''
     sorted_x_y_pairs = self.get_sorted_items(limit)
