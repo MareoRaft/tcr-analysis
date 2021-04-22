@@ -35,19 +35,25 @@ To run tests, run the dev environment (see above) and then (in a separate termin
 ## build, test, and deploy
 The server is a dev server
 
-	git push
-	docker push mvlancellotti/tcr-analysis:dev
-	ssh date
-	su matt
-	tmux
-	# reattach to 'tcr-analysis' tmux session
-	cd tcr-analysis
-	git pull
-	sudo docker pull mvlancellotti/tcr-analysis:dev
-	# consider deleting old images if the droplet runs out of space
-	# use ctrl-C to exit current container
-	# remove the container if necessary
-	sudo docker rm tcr-analysis-container
-	sudo docker-compose up --build
+  # todo: once the below is reliable, move it into a script so it can be fully automated
+  git push
+  docker push mvlancellotti/tcr-analysis:dev
+  ssh date
+  # if it says 'System restart required', restart the machine
+  sudo reboot
+  su matt
+  tmux
+  # reattach to 'tcr-analysis' tmux session
+  cd tcr-analysis
+  # commit changes if biologist made any meaningful changes, otherwise just throw them out
+  git checkout -- .
+  git pull
+  sudo docker pull mvlancellotti/tcr-analysis:dev
+  # consider deleting old images if the droplet runs out of space
+  # use ctrl-C to exit current container
+  # remove the container if necessary
+  sudo docker rm tcr-analysis-container
+  # ALL docker commands including this one are not necessary if you didn't make docker changes
+  sudo docker-compose up --build
 
 then visit `date:4001` or `http://date:4001/notebooks/analysis.ipynb?token={entertokenhere}`.
