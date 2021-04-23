@@ -9,7 +9,7 @@ from pretty_print import pprint
 
 
 @record_elapsed_time
-def get_common_cdr3s(samples, limit):
+def get_common_cdr3s(samples, limit=None):
     ''' internal function. could potentially belong to Sample class '''
     # all we really need is a set intersection
     restricted_cdr3_lists = [s.get_sorted_cdr3s(limit=limit) for s in samples]
@@ -17,7 +17,7 @@ def get_common_cdr3s(samples, limit):
     cdr3_intersection = set.intersection(*cdr3_sets)
     return cdr3_intersection
 
-def find_common_cdr3s(file_names, n):
+def find_common_cdr3s(file_names, n=None):
     ''' user facing function '''
     samples = [data_utils.get_cdr3_counter_from_file(f,f) for f in file_names]
     cdr3s = get_common_cdr3s(
