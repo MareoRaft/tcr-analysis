@@ -46,7 +46,35 @@ def test_linfty():
 	# the max diff isn't from the first line in the file
 	a = get_series('cdr3.test7.ann')
 	b = get_series('cdr3.test8.ann')
-	assert linfty(a, b) == 1	  
+	assert linfty(a, b) == 1
+
+def test_jensen_shannon():
+    # two identical samples gives distance 0
+    a = get_series('cdr3.test.ann')
+    b = get_series('cdr3.test.ann')
+    assert jensen_shannon(a, b) == 0
+    # two samples which when normalized are identical also give a distance of 0
+    # a = <0, 2>, b = <0, 4>
+    # a' = a/|a| = <0, 1>, b' = <0, 1>
+    a = get_series('cdr3.test3.ann')
+    b = get_series('cdr3.test9.ann')
+    assert jensen_shannon(a, b) == 0
+    # a = <0, 1>, b = <1, 0>
+    # m = (a + b)/2 = <0.5, 0.5>
+    # D(a || m) = 0*log(0/0.5) + 1*log(1/0.5) = 0 + 1*1 = 1 (using log base 2)
+    # D(b || m) = 1
+    # JSdist(a, b) = sqrt((D(a || m) + D(b || m)) / 2) = sqrt((1 + 1) / 2) = 1
+    a = get_series('cdr3.test10.ann')
+    b = get_series('cdr3.test11.ann')
+    assert jensen_shannon(a, b) == 1
+    # make sure that things are aligned by index
+    a = get_series('cdr3.test10.ann')
+    b = get_series('cdr3.test13.ann')
+    assert jensen_shannon(a, b) == 1
+    # check that a fill value of 0 is used for missing cdr3s
+    a = get_series('cdr3.test10.ann')
+    b = get_series('cdr3.test12.ann')
+    assert jensen_shannon(a, b) == 1
 
 def test_jaccard_index():
 	a = get_series('cdr3.test3.ann')

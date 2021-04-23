@@ -7,6 +7,8 @@ import itertools
 
 import numpy as np
 import pandas as pd
+from scipy.spatial import distance as scipy_distance
+
 
 
 
@@ -63,6 +65,14 @@ def jaccard(a, b):
 
 def weighted_jaccard(a, b):
   return 1 - weighted_jaccard_index(a, b)
+
+def jensen_shannon(a, b):
+    ''' We use scipy's jensenshannon distance function (which includes normalizing a and b into unit vectors as a preprocessing step) with a base 2 logorithm in the Kullback-Leibler divergence. '''
+    # use a kluge to fill in 0 values where missing
+    a_filled_sorted = a.add(b, fill_value=0).subtract(b, fill_value=0).sort_index()
+    b_filled_sorted = b.add(a, fill_value=0).subtract(a, fill_value=0).sort_index()
+    # apply scipy metric
+    return scipy_distance.jensenshannon(a_filled_sorted, b_filled_sorted, 2.0)
 
 
 
