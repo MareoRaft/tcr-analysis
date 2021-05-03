@@ -1,3 +1,5 @@
+import functools
+
 import numpy as np
 import pandas as pd
 
@@ -7,9 +9,16 @@ def test_init():
   get_series('cdr3.a.A_2000_2001_d_00_47407.ann')
 
 def test_add():
+  # with .add() method
   a = get_series('cdr3.test.ann')
   b = get_series('cdr3.test2.ann')
   c = a.add(b, fill_value=0)
+  correct_c = c
+  # add any number of series
+  a = get_series('cdr3.test.ann')
+  b = get_series('cdr3.test2.ann')
+  c = functools.reduce(lambda a,b: a.add(b, fill_value=0), [a,b])
+  assert c.equals(correct_c)
 
 def test_min():
   a = get_series('cdr3.test6.ann')
@@ -30,8 +39,3 @@ def test_l2_distance():
 
 if __name__ == '__main__':
   test_min()
-
-
-
-
-

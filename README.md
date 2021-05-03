@@ -19,7 +19,7 @@ Install [Docker](https://www.docker.com/get-started).  That's it!
 
     docker-compose up --build
 
-then visit `localhost:4001` or `http://localhost:4001/notebooks/analysis.ipynb?token={entertokenhere}`.  You should see a Jupyter frontend.
+then visit `localhost:4001` or `http://localhost:4001/lab/tree/analysis.ipynb`.  You should see a Jupyter frontend.
 
 
 
@@ -57,4 +57,4 @@ The server is a dev server
   # ALL docker commands including this one are not necessary if you didn't make docker changes
   sudo docker-compose up --build
 
-then visit `date:4001` or `http://date:4001/notebooks/analysis.ipynb?token={entertokenhere}`.
+then visit `date:4001` or `http://localhost:4001/lab/tree/analysis.ipynb`.
