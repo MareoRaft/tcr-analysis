@@ -36,6 +36,7 @@ To run tests, run the dev environment (see above) and then (in a separate termin
 The server is a dev server
 
   # todo: once the below is reliable, move it into a script so it can be fully automated
+  # last update took just 5 minutes.  there was no docker update though.
   git push
   docker push mvlancellotti/tcr-analysis:dev
   ssh date

@@ -9,4 +9,4 @@ services:
         ports:
           - 4001:8888
         volumes:
-          - ./src:/home/matt/work
+          - ./src:/home/jovyan/work
