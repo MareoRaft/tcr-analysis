@@ -2,6 +2,7 @@ import datetime
 
 from sample import Sample
 from data_utils import *
+from data_utils import get_cdr3_series_from_file as get_series
 
 def test_get_cdr3_counter_from_file():
   assert get_cdr3_counter_from_file('A', 'cdr3.test.ann') == Sample('A', {
@@ -27,3 +28,16 @@ def test_get_date_from_file_name():
 
 def test_to_beta():
   assert to_beta(['cdr3.a.A_2017_2018_m_04_73516.ann']) == ['cdr3.b.A_2017_2018_m_04_73516.ann']
+
+def test_make_series_compatible():
+  a = get_series('cdr3.test4.ann')
+  b = get_series('cdr3.test5.ann')
+  a,b = make_series_compatible([a, b])
+  # assert a == pd.Series(
+  #   data=[0, 0, 3, 4],
+  #   index=['a', 'b', 'q', 'w'],
+  # )
+
+if __name__ == '__main__':
+  test_make_series_compatible()
+  

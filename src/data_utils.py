@@ -70,4 +70,21 @@ def to_beta(filepaths):
   new_filepaths = [re.sub(r'\.a\.', '.b.', f) for f in filepaths]
   return new_filepaths
 
-
+def make_series_compatible(series_iterable):
+    ''' If you have multiple series (representing samples), then we need to make them share the same CDR3 sequences, and in the same order (alphabetical), before we can do vector operations between them. '''
+    # use a kluge to fill in 0 values where missing
+    # create a big 0 vector with all the CDR3s
+    zero_series = pd.Series(dtype=object)
+    for s in series_iterable:
+        zero_series.add(s, fill_value=0).subtract(s, fill_value=0)
+    print('zero ser:')
+    print(zero_series)
+    print(list(zero_series.keys()))
+    print(zero_series.values)
+    # add all the CDR3s to all the series, and sort the indices alphabetically
+    for s in series_iterable:
+        s.add(zero_series, fill_value=0).subtract(zero_series, fill_value=0).sort_index()
+        print('s:')
+        print(s)
+    # return the resulting series
+    return series_iterable
