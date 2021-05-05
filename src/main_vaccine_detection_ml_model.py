@@ -37,27 +37,29 @@ def run_loocv(X, y):
     num_correct = 0
     num_total = 0
     results = []
-    X = pd.DataFrame.from_dict(X, orient='index').fillna(0)
+    X = {index:data_utils.get_cdr3_counter_from_file(f,f) for index,f in enumerate(X)}
     y = np.array(y)
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1, random_state=None)
     loo = LeaveOneOut()
-    for train_index, test_index in loo.split(X):
-        X_train = X.loc[train_index]
-        X_test = X.loc[test_index]
-        y_train = y[train_index]
-        y_test = y[test_index]
-        y_test, y_pred = run_model(X_train, X_test, y_train, y_test)
-        num_correct += bool(y_test == y_pred)
-        num_total += 1
-        results.append((y_test, y_pred))
-    accuracy = num_correct / num_total
-    return results, accuracy
+    for train_index, test_index in loo.split(y):
+        print(train_index)
+        print(type(train_index))
+    #     X_df = pd.DataFrame.from_dict(X, orient='index').fillna(0)
+    #     X_train = X_df.loc[train_index]
+    #     X_test = X_df.loc[test_index]
+    #     y_train = y[train_index]
+    #     y_test = y[test_index]
+    #     y_test, y_pred = run_model(X_train, X_test, y_train, y_test)
+    #     num_correct += bool(y_test == y_pred)
+    #     num_total += 1
+    #     results.append((y_test, y_pred))
+    # accuracy = num_correct / num_total
+    # return results, accuracy
 
 def detect_vaccine(X, y):
     ''' user facing function '''
     # remove test
     # convert file names to sample vectors
-    X = {index:data_utils.get_cdr3_counter_from_file(f,f) for index,f in enumerate(X)}
     results, accuracy = run_loocv(X, y)
     print(results)
     print(accuracy)
@@ -66,29 +68,13 @@ def detect_vaccine(X, y):
 def main():
     detect_vaccine(
         X=[
-            'cdr3.a.A_2017_2018_d_00_53535.ann',
-            'cdr3.a.A_2017_2018_d_07_11143.ann',
-            'cdr3.a.B_2017_2018_d_00_56786.ann',
-            'cdr3.a.B_2017_2018_d_09_50844.ann',
-            'cdr3.a.C_2017_2018_d_00_26898.ann',
-            'cdr3.a.C_2017_2018_d_07_48996.ann',
-            'cdr3.a.D_2017_2018_d_00_45294.ann',
-            'cdr3.a.D_2017_2018_d_07_55841.ann',
-            'cdr3.a.E_2017_2018_d_00_94077.ann',
-            'cdr3.a.E_2017_2018_d_07_54569.ann',
+            ('cdr3.a.A_2017_2018_d_00_53535.ann','cdr3.a.A_2017_2018_d_07_11143.ann')
+            ('cdr3.a.B_2017_2018_d_00_56786.ann','cdr3.a.B_2017_2018_d_09_50844.ann')
+            ('cdr3.a.C_2017_2018_d_00_26898.ann','cdr3.a.C_2017_2018_d_07_48996.ann')
+            ('cdr3.a.D_2017_2018_d_00_45294.ann','cdr3.a.D_2017_2018_d_07_55841.ann')
+            ('cdr3.a.E_2017_2018_d_00_94077.ann','cdr3.a.E_2017_2018_d_07_54569.ann')
         ],
-        y=[
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-        ],
+        y=[(0, 1)] * 5,
     )
 
 if __name__ == '__main__':
