@@ -60,7 +60,8 @@ def detect_vaccine(X, y):
     X = {index:data_utils.get_cdr3_counter_from_file(f,f) for index,f in enumerate(X)}
     results, accuracy = run_loocv(X, y)
     print(results)
-    print(accuracy)
+    print('')
+    print('accuracy:', accuracy)
 
 @record_elapsed_time
 def main():
