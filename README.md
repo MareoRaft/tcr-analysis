@@ -57,4 +57,4 @@ The server is a dev server
   # ALL docker commands including this one are not necessary if you didn't make docker changes
   sudo docker-compose up --build
 
-then visit `date:4001` or `http://localhost:4001/lab/tree/analysis.ipynb`.
+then visit `date:4001` or `http://date:4001/lab/tree/analysis.ipynb`.
