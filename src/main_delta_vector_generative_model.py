@@ -16,7 +16,6 @@ def run_model(X_train, X_test, y_train, y_test, dist_func):
     # train model (compute the average delta vec D)
     avg_delta_vec = get_avg(X_train_oriented)
     neg_delta_vec = -avg_delta_vec
-    print('neg avg delta vec:', neg_delta_vec)
     # predict (see if vec is closer to D or -D)
     y_test_pred = []
     for v in X_test:
@@ -68,7 +67,7 @@ def detect_vaccine(X, y, dist_func, data_limit=None):
     y = y[:data_limit]
     # preprocess
     X = preprocess_X(X)
-    X = np.array(X)
+    X = np.array(X, dtype=object)
     y = np.array(y)
     # run LOOCV
     results, accuracy = run_loocv(X, y, dist_func)
