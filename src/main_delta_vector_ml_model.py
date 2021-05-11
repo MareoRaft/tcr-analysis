@@ -3,6 +3,7 @@ Given a sample, perform hierarchical clustering on its CDR3s.
 '''
 import functools
 import itertools
+import time
 
 import numpy as np
 import pandas as pd
@@ -14,6 +15,7 @@ from decorators import record_elapsed_time
 import data_utils
 from pretty_print import pprint
 from sample import Sample
+import series
 
 
 def run_model(X_train, X_test, y_train, y_test):
@@ -76,9 +78,9 @@ def preprocess_X(X):
     print('got delta vecs')
     # TODO: add weak intersection back in
     # weak intersection of CDR3s in samples
-    # trimmed_counters = Sample.weak_intersection(counters)
+    trimmed_delta_vecs = series.weak_intersection(delta_vecs)
     # convert to a dictionary that is compatible with a Pandas DataFrame
-    return delta_vecs
+    return trimmed_delta_vecs
 
 def detect_vaccine(X, y, limit=None):
     ''' user facing function '''
@@ -93,9 +95,13 @@ def detect_vaccine(X, y, limit=None):
     print('X len, y:')
     print(len(X))
     print(y)
+
+    start_time = time.time()
     # put into correct type
     X = {i:c for i,c in enumerate(X)}
     X = pd.DataFrame.from_dict(X, orient='index').fillna(0)
+    print('time to put data into df:', time.time() - start_time)
+
     print('num rows,cols:')
     print(X.shape)
     y = np.array(y)
@@ -106,7 +112,7 @@ def detect_vaccine(X, y, limit=None):
 
 @record_elapsed_time
 def main():
-    limit = 2
+    limit = 3
     detect_vaccine(
         limit=limit,
         X=[
