@@ -2,25 +2,23 @@
 Given a sample, perform hierarchical clustering on its CDR3s.
 '''
 import functools
+import itertools
+import time
 
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import SGDClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, LeaveOneOut
-import sklearn
 
 from decorators import record_elapsed_time
 import data_utils
 from pretty_print import pprint
 from sample import Sample
+import series
 
 
 def run_model(X_train, X_test, y_train, y_test):
-    # shuffle data
-    # TODO: enable shuffle
-    # X_train, y_train = sklearn.utils.shuffle(X_train, y_train, random_state=None) # untested
     # init model
     classifier = make_pipeline(
         StandardScaler(),
@@ -57,7 +55,6 @@ def run_loocv(X, y):
     num_correct = 0
     num_total = 0
     results = []
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1, random_state=None)
     for train_indices, test_indices in get_loocv_indices(len(y)):
         print(train_indices)
         print(test_indices)
@@ -76,12 +73,14 @@ def run_loocv(X, y):
 def preprocess_X(X):
     ''' preprocess X '''
     # convert file names to sample vectors
-    counters = [data_utils.get_cdr3_counter_from_file(f,f) for f in X]
+    series_pairs = [(data_utils.get_cdr3_series_from_file(a), data_utils.get_cdr3_series_from_file(b)) for a,b in X]
+    delta_vecs = [after.subtract(before, fill_value=0) for before,after in series_pairs]
+    print('got delta vecs')
+    # TODO: add weak intersection back in
     # weak intersection of CDR3s in samples
-    trimmed_counters = Sample.weak_intersection(counters)
+    trimmed_delta_vecs = series.weak_intersection(delta_vecs)
     # convert to a dictionary that is compatible with a Pandas DataFrame
-    X = {i:c for i,c in enumerate(trimmed_counters)}
-    return X
+    return trimmed_delta_vecs
 
 def detect_vaccine(X, y, limit=None):
     ''' user facing function '''
@@ -90,8 +89,19 @@ def detect_vaccine(X, y, limit=None):
     y = y[:limit]
     # preprocess
     X = preprocess_X(X)
+    # negated vecs go with negated labels
+    X = list(itertools.chain(*[(v, -v) for v in X]))
+    y = list(itertools.chain(*[(label, 1-label) for label in y]))
+    print('X len, y:')
+    print(len(X))
+    print(y)
+
+    start_time = time.time()
     # put into correct type
+    X = {i:c for i,c in enumerate(X)}
     X = pd.DataFrame.from_dict(X, orient='index').fillna(0)
+    print('time to put data into df:', time.time() - start_time)
+
     print('num rows,cols:')
     print(X.shape)
     y = np.array(y)
@@ -102,32 +112,20 @@ def detect_vaccine(X, y, limit=None):
 
 @record_elapsed_time
 def main():
+    limit = 3
     detect_vaccine(
-        limit=4,
+        limit=limit,
         X=[
-            'cdr3.a.A_2017_2018_d_00_53535.ann',
-            'cdr3.a.A_2017_2018_d_07_11143.ann',
-            'cdr3.a.B_2017_2018_d_00_56786.ann',
-            'cdr3.a.B_2017_2018_d_09_50844.ann',
-            'cdr3.a.C_2017_2018_d_00_26898.ann',
-            'cdr3.a.C_2017_2018_d_07_48996.ann',
-            'cdr3.a.D_2017_2018_d_00_45294.ann',
-            'cdr3.a.D_2017_2018_d_07_55841.ann',
-            'cdr3.a.E_2017_2018_d_00_94077.ann',
-            'cdr3.a.E_2017_2018_d_07_54569.ann',
+            ('cdr3.a.A_2017_2018_d_00_53535.ann','cdr3.a.A_2017_2018_d_07_11143.ann'),
+            ('cdr3.a.B_2017_2018_d_00_56786.ann','cdr3.a.B_2017_2018_d_09_50844.ann'),
+            ('cdr3.a.C_2017_2018_d_00_26898.ann','cdr3.a.C_2017_2018_d_07_48996.ann'),
+            ('cdr3.a.D_2017_2018_d_00_45294.ann','cdr3.a.D_2017_2018_d_07_55841.ann'),
+            ('cdr3.a.E_2017_2018_d_00_94077.ann','cdr3.a.E_2017_2018_d_07_54569.ann'),
         ],
-        y=[
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-        ],
+        # labels
+        # 1 -> oriented as (before vaccine, after vaccine)
+        # 0 -> oriented as (after vaccine, before vaccine)
+        y=[1] * 5,
     )
 
 if __name__ == '__main__':

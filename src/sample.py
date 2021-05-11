@@ -7,13 +7,7 @@ import functools
 
 import numpy as np
 
-
-def weak_intersection(sets):
-    ''' The 'weak intersection' of an iterable of sets is the set of elements that appear in at least 2 of the sets. '''
-    counters = [collections.Counter(s) for s in sets]
-    combined_counter = functools.reduce(collections.Counter.__add__, counters)
-    weak_intersection_set = {k for k,v in combined_counter.items() if v > 1}
-    return weak_intersection_set
+import set_utils
 
 
 class Sample (collections.Counter):
@@ -94,3 +88,14 @@ class Sample (collections.Counter):
     sample_size = min(sample_size, len(items))
     sample_items = random.sample(list(items), sample_size)
     return sample_items
+
+  @classmethod
+  def weak_intersection(cls, samples):
+    ''' The 'weak intersection' of a bunch of samples is the weak intersection of their keys as sets. '''
+    samples_cdr3s_list = [set(s.keys()) for s in samples]
+    cdr3s_weak_intersection = set_utils.weak_intersection(samples_cdr3s_list)
+    samples_weak_intersection = [
+        {k:s[k] for k in cdr3s_weak_intersection}
+        for s in samples
+    ]
+    return samples_weak_intersection

@@ -106,5 +106,14 @@ def test_cutoff():
   s['d'] = Sample.CUTOFF - 1
   assert 'd' not in s
 
+def test_weak_intersection():
+    # for two sets, it is just the intersection
+    a = Sample('a', {c:100 for c in ['q', 'w']})
+    b = Sample('b', {c:100 for c in ['e', 'w']})
+    assert Sample.weak_intersection([a, b]) == [
+        Sample('a', {'w':100}),
+        Sample('b', {'w':100}),
+    ]
+
 if __name__ == '__main__':
   test_cutoff()

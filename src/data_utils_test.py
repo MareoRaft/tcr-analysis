@@ -33,11 +33,6 @@ def test_make_series_compatible():
   a = get_series('cdr3.test4.ann')
   b = get_series('cdr3.test5.ann')
   a,b = make_series_compatible([a, b])
-  # assert a == pd.Series(
-  #   data=[0, 0, 3, 4],
-  #   index=['a', 'b', 'q', 'w'],
-  # )
 
 if __name__ == '__main__':
   test_make_series_compatible()
-  
