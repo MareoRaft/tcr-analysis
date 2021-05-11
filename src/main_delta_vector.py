@@ -11,26 +11,30 @@ from decorators import record_elapsed_time
 import data_utils
 from pretty_print import pprint
 
+# TODO: move to series file
+def get_avg(series_iterable):
+    sum_series = functools.reduce(lambda a,b: a.add(b, fill_value=0), series_iterable)
+    avg_series = sum_series / len(sum_series)
+    return avg_series
 
 @record_elapsed_time
-def get_avg_delta_vector(sample_pairs):
+def get_avg_delta_vector(series_pairs):
     ''' internal function. '''
-    # for each (before_vaccine, after_vaccine) pair, compute the delta
-    deltas = [after.subtract(before, fill_value=0) for before,after in sample_pairs]
+    # for each (before_vaccine, after_vaccine) pair, compute the series_pairs
+    deltas = [after.subtract(before, fill_value=0) for before,after in series_pairs]
     # take the average of the deltas
-    sum_delta = functools.reduce(lambda a,b: a.add(b, fill_value=0), deltas)
-    avg_delta = sum_delta / len(deltas)
+    avg_delta = get_avg(deltas)
     # return result
     return avg_delta
 
 def compute_vaccine_delta_vector(file_names):
     ''' user facing function '''
-    sample_pairs = [
+    series_pairs = [
         # use Scipy Series since we are going to subtract samples from each other
         tuple(data_utils.get_cdr3_series_from_file(f) for f in pair)
         for pair in file_names
     ]
-    vaccine_delta_vector = get_avg_delta_vector(sample_pairs)
+    vaccine_delta_vector = get_avg_delta_vector(series_pairs)
     print(vaccine_delta_vector)
 
 @record_elapsed_time
