@@ -56,6 +56,18 @@ class Sample (collections.Counter):
     sorted_items = sorted(self.items(), key=lambda item: -item[1])[:limit]
     return sorted_items
 
+  def get_sorted_dict(self, limit=None):
+    ''' Get a dict. Limit length by `limit`. '''
+    sorted_items = self.get_sorted_items(limit=limit)
+    dic = {k:v for k,v in sorted_items}
+    return dic
+
+  def get_sorted_sample(self, limit=None):
+    ''' Get a Sample. Limit length by `limit`. '''
+    sorted_items = self.get_sorted_items(limit=limit)
+    sample = Sample(self.id+'_sorted', sorted_items)
+    return sample
+
   def get_sorted_cdr3s(self, limit=None):
     ''' Get the top `limit` cdr3s, sorted from most frequent to least. '''
     top_items = self.get_sorted_items(limit=limit)

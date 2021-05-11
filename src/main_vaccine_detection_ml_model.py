@@ -18,13 +18,10 @@ from sample import Sample
 
 
 def run_model(X_train, X_test, y_train, y_test):
-    # shuffle data
-    # TODO: enable shuffle
-    # X_train, y_train = sklearn.utils.shuffle(X_train, y_train, random_state=None) # untested
     # init model
     classifier = make_pipeline(
         StandardScaler(),
-        SGDClassifier(max_iter=4000),
+        SGDClassifier(max_iter=8000),
     )
     # train model
     classifier.fit(X_train, y_train)
@@ -73,27 +70,30 @@ def run_loocv(X, y):
     accuracy = num_correct / num_total
     return results, accuracy
 
-def preprocess_X(X):
+def preprocess_X(X, cdr3_limit):
     ''' preprocess X '''
     # convert file names to sample vectors
     counters = [data_utils.get_cdr3_counter_from_file(f,f) for f in X]
+    # top n CDR3s in samples
+    topc_counters = [c.get_sorted_sample(limit=cdr3_limit) for c in counters]
     # weak intersection of CDR3s in samples
-    trimmed_counters = Sample.weak_intersection(counters)
+    trimmed_counters = Sample.weak_intersection(topc_counters)
     # convert to a dictionary that is compatible with a Pandas DataFrame
     X = {i:c for i,c in enumerate(trimmed_counters)}
     return X
 
-def detect_vaccine(X, y, limit=None):
+def detect_vaccine(X, y, cdr3_limit=None, data_limit=None):
     ''' user facing function '''
     # restrict data
-    X = X[:limit]
-    y = y[:limit]
+    X = X[:data_limit]
+    y = y[:data_limit]
     # preprocess
-    X = preprocess_X(X)
+    X = preprocess_X(X, cdr3_limit)
     # put into correct type
     X = pd.DataFrame.from_dict(X, orient='index').fillna(0)
     print('num rows,cols:')
     print(X.shape)
+    print(X)
     y = np.array(y)
     results, accuracy = run_loocv(X, y)
     print(results)
@@ -103,7 +103,8 @@ def detect_vaccine(X, y, limit=None):
 @record_elapsed_time
 def main():
     detect_vaccine(
-        limit=4,
+        cdr3_limit=500,
+        data_limit=10,
         X=[
             'cdr3.a.A_2017_2018_d_00_53535.ann',
             'cdr3.a.A_2017_2018_d_07_11143.ann',
